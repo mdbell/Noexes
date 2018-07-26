@@ -1,0 +1,7 @@
+.table-cell {
+    -fx-alignment: CENTER;
+}
+
+.ascii_cell {
+    -fx-font-family: "Courier New";
+}

@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="JNoexsClient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JNoexsClient_jar</output-path>
+    <root id="root">
+      <element id="archive" name="JNoexsClient.jar">
+        <element id="module-output" name="JNoexsClient" />
+        <element id="module-output" name="Utils" />
+      </element>
+    </root>
+  </artifact>
+</component>
