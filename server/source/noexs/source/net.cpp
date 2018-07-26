@@ -1,5 +1,6 @@
-#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include "errors.h"
 #include "gecko.h"
@@ -48,7 +49,8 @@ bool Gecko::Connection::connect(int port){
         return false;
     }
     
-    shutdown(sockfd, 2);
+    shutdown(sockfd, SHUT_WR);
+    close(sockfd);
 	sockfd = DISCONNECTED_FD;
     
     this->sockfd = clientfd;
@@ -61,7 +63,8 @@ bool Gecko::Connection::connected(){
 
 void Gecko::Connection::disconnect(){
     if(connected()){
-        shutdown(this->sockfd, 2);
+        shutdown(this->sockfd, SHUT_WR);
+        close(sockfd);
         this->sockfd = DISCONNECTED_FD;
     }
 }

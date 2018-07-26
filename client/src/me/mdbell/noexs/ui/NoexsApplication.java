@@ -13,8 +13,12 @@ import java.io.IOException;
 
 public class NoexsApplication extends Application {
 
+    public static final int VERSION_MAJOR = 1;
+    public static final int VERSION_MINOR = 0;
+    public static final int VERSION_PATCH = 1;
+
     public static final String APP_NAME = "JNoexs";
-    public static final String APP_VERSION = "1.0.0-1";
+    public static final String APP_VERSION = VERSION_MAJOR + "." + VERSION_MINOR + "." + VERSION_PATCH;
 
     public static void main(String[] args) {
         launch(args);

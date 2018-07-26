@@ -3,6 +3,7 @@ package me.mdbell.noexs.core;
 import me.mdbell.noexs.misc.BreakpointFlagBuilder;
 import me.mdbell.noexs.misc.BreakpointType;
 import me.mdbell.noexs.misc.WatchpointFlagBuilder;
+import me.mdbell.noexs.ui.NoexsApplication;
 import me.mdbell.noexs.ui.models.DataType;
 
 import java.io.Closeable;
@@ -20,7 +21,7 @@ public class Debugger implements Commands, Closeable {
     private Semaphore semaphore = new Semaphore(1);
     private int protocolVersion;
 
-    public static final int CURRENT_PROTOCOL_VERSION = 0x100000;
+    public static final int CURRENT_PROTOCOL_VERSION = (NoexsApplication.VERSION_MAJOR << 16) | (NoexsApplication.VERSION_MINOR) << 8;
 
     public Debugger(IConnection conn) {
         this.conn = conn;
@@ -43,7 +44,6 @@ public class Debugger implements Commands, Closeable {
         semaphore.release();
     }
 
-    //TODO make an enum
     public DebuggerStatus getStatus() {
         acquire();
         try {
@@ -53,7 +53,7 @@ public class Debugger implements Commands, Closeable {
             int major = conn.readByte();
             int minor = conn.readByte();
             int patch = conn.readByte();
-            this.protocolVersion = (major << 16) | (minor << 8) | patch;
+            this.protocolVersion = (major << 16) | (minor << 8);
             Result rc = conn.readResult();
             if (rc.failed()) {
                 throw new ConnectionException("This is impossible, so you've done something terribly wrong", rc);
@@ -61,6 +61,7 @@ public class Debugger implements Commands, Closeable {
             if(protocolVersion > CURRENT_PROTOCOL_VERSION) {
                 throw new ConnectionException(String.format("Unsupported protocol version:%08X", protocolVersion));
             }
+            protocolVersion |= patch; // we don't need to check the patch value, as it should always be backwards compatible.
             return DebuggerStatus.forId(status);
         } finally {
             release();
