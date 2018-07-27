@@ -6,6 +6,14 @@
 #include "gecko.h"
 #include "net.h"
 
+static void kill(int& sockfd){
+    if(sockfd != DISCONNECTED_FD){
+        shutdown(sockfd, SHUT_WR);
+        close(sockfd);
+        sockfd = DISCONNECTED_FD;
+    }
+}
+
 bool Gecko::Connection::connect(int port){
     int sockfd = -1, clientfd = -1, ret;
     struct sockaddr_in addr;
@@ -45,13 +53,11 @@ bool Gecko::Connection::connect(int port){
     socklen_t len = 16;
     clientfd = ret = accept(sockfd, (struct sockaddr *)&addr, &len);
     if (ret == -1) {
-        fatalSimple(MAKERESULT(Module_TCPGecko, TCPGeckoError_acceptfail));
+        kill(sockfd);
         return false;
     }
     
-    shutdown(sockfd, SHUT_WR);
-    close(sockfd);
-	sockfd = DISCONNECTED_FD;
+    kill(sockfd);
     
     this->sockfd = clientfd;
     return true;
@@ -63,9 +69,7 @@ bool Gecko::Connection::connected(){
 
 void Gecko::Connection::disconnect(){
     if(connected()){
-        shutdown(this->sockfd, SHUT_WR);
-        close(sockfd);
-        this->sockfd = DISCONNECTED_FD;
+        kill(sockfd);
     }
 }
 
