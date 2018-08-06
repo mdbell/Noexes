@@ -11,8 +11,8 @@
 #include "net.h"
 
 #define VER_MAJOR (1)
-#define VER_MINOR (0)
-#define VER_PATCH (3)
+#define VER_MINOR (1)
+#define VER_PATCH (0)
 
 #define GECKO_BUFFER_SIZE (2048 * 4)
 
