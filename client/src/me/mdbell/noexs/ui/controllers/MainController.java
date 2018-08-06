@@ -290,18 +290,20 @@ public class MainController implements NetworkConstants, IController {
     }
 
     public void continueProcess() {
-        if (debugger.resume().succeeded()) {
+        Result res = debugger.resume();
+        if (res.succeeded()) {
             setStatus("Resumed");
         } else {
-            setStatus("Unable to resume.");
+            setStatus("Unable to resume. Reason:" + res);
         }
     }
 
     public void pauseGame(ActionEvent event) {
-        if (debugger.pause().succeeded()) {
+        Result res = debugger.pause();
+        if (res.succeeded()) {
             setStatus("Paused");
         } else {
-            setStatus("Unable to pause");
+            setStatus("Unable to pause. Reason:" + res);
         }
     }
 
