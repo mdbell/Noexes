@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
@@ -34,6 +35,7 @@ import java.util.function.Consumer;
 public class MainController implements NetworkConstants, IController {
 
     public ChoiceBox<ConnectionType> connectionType;
+    public CheckBox autoResume;
     private Debugger debugger = new Debugger(NopConnection.INSTANCE);
 
     /* Global Elements */
@@ -116,6 +118,15 @@ public class MainController implements NetworkConstants, IController {
         connectionType.getSelectionModel().select(ConnectionType.NETWORK); //TODO save/store this
         connectionType.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> ipAddr.setDisable(newValue != ConnectionType.NETWORK));
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(debugger.connected() && autoResume.isSelected()) {
+                    debugger.resume();
+                }
+            }
+        }, 0, 100);
     }
 
     void fire(Consumer<IController> c) {
