@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -12,13 +13,20 @@ import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.MemoryInfo;
 import me.mdbell.noexs.core.MemoryType;
 import me.mdbell.noexs.core.Result;
+import me.mdbell.noexs.misc.ExpressionEvaluator;
 import me.mdbell.noexs.ui.menus.MemoryInfoContextMenu;
 import me.mdbell.noexs.ui.models.MemoryInfoTableModel;
 import me.mdbell.util.HexUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+
 
 public class ToolsController implements IController {
 
+    public TextField expression;
+    public TextField expressionResult;
     private MainController mc;
 
     @FXML
@@ -43,6 +51,18 @@ public class ToolsController implements IController {
     Label toolsTitleId;
 
     private ObservableList<MemoryInfoTableModel> memoryInfoList;
+
+    private final ExpressionEvaluator evaluator = new ExpressionEvaluator(new ExpressionEvaluator.VariableProvider() {
+        @Override
+        public long get(String name) {
+            return memoryInfoList.filtered(memoryInfoTableModel -> memoryInfoTableModel.nameProperty().get().equals(name)).get(0).getAddr();
+        }
+
+        @Override
+        public boolean containsVar(String value) {
+            return memoryInfoList.filtered(memoryInfoTableModel -> memoryInfoTableModel.nameProperty().get().equals(value)).size() > 0;
+        }
+    }, addr -> mc.getConnection().peek64(addr));
 
     @FXML
     public void initialize() {
@@ -191,6 +211,19 @@ public class ToolsController implements IController {
             if (m.getType() != MemoryType.UNMAPPED) {
                 memoryInfoList.add(new MemoryInfoTableModel(name, m));
             }
+        }
+    }
+
+    public ExpressionEvaluator getEvaluator(){
+        return evaluator;
+    }
+
+    public void onParse(ActionEvent event) {
+        try {
+            String str = expression.getText();
+            expressionResult.setText(HexUtils.formatAddress(evaluator.eval(str)));
+        } catch (Exception e) {
+            MainController.showMessage(e);
         }
     }
 }

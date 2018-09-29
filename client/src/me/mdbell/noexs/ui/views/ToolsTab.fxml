@@ -5,14 +5,15 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="toolsTabPage" disable="true" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.ToolsController">
     <children>
-        <TitledPane animated="false" collapsible="false" layoutX="487.0" layoutY="13.0" prefHeight="446.0" prefWidth="521.0" text="PID Selection">
+        <TitledPane animated="false" collapsible="false" layoutX="487.0" layoutY="13.0" prefHeight="402.0" prefWidth="521.0" text="PID Selection">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="519.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="366.0" prefWidth="519.0">
                     <children>
                         <ListView fx:id="pidList" editable="true" layoutX="14.0" layoutY="14.0" prefHeight="386.0" prefWidth="266.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                         <Button layoutX="302.0" layoutY="25.0" mnemonicParsing="false" onAction="#setPidsList" prefHeight="25.0" prefWidth="210.0" text="Refresh Pids" />
@@ -23,7 +24,7 @@
                 </AnchorPane>
             </content>
         </TitledPane>
-        <TableView fx:id="memInfoTable" layoutX="23.0" layoutY="14.0" prefHeight="446.0" prefWidth="442.0">
+        <TableView fx:id="memInfoTable" layoutX="23.0" layoutY="14.0" prefHeight="402.0" prefWidth="442.0">
             <columns>
                 <TableColumn fx:id="memInfoName" prefWidth="75.0" text="Name" />
                 <TableColumn fx:id="memInfoAddr" prefWidth="102.0" text="Address" />
@@ -35,5 +36,9 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
+      <Label layoutX="23.0" layoutY="429.0" text="Expression:" />
+      <TextField fx:id="expression" layoutX="89.0" layoutY="425.0" prefHeight="25.0" prefWidth="333.0" />
+      <Button layoutX="435.0" layoutY="425.0" mnemonicParsing="false" onAction="#onParse" text="Parse" />
+      <TextField fx:id="expressionResult" editable="false" layoutX="487.0" layoutY="425.0" />
     </children>
 </AnchorPane>

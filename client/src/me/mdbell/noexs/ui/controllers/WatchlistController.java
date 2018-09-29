@@ -1,6 +1,5 @@
 package me.mdbell.noexs.ui.controllers;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,16 +9,14 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
-import me.mdbell.javafx.control.AddressSpinner;
 import me.mdbell.javafx.control.HexSpinner;
 import me.mdbell.javafx.control.SpinnerTableCell;
 import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.ui.models.DataType;
 import me.mdbell.noexs.ui.models.WatchlistModel;
+import me.mdbell.util.HexUtils;
 
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
@@ -30,7 +27,7 @@ public class WatchlistController implements IController {
     public TableView<WatchlistModel> watchlistTable;
     public TableColumn<WatchlistModel, Boolean> updateCol;
     public TableColumn<WatchlistModel, Boolean> lockedCol;
-    public TableColumn<WatchlistModel, Long> addrCol;
+    public TableColumn<WatchlistModel, String> addrCol;
     public TableColumn<WatchlistModel, String> descCol;
     public TableColumn<WatchlistModel, DataType> typeCol;
     public TableColumn<WatchlistModel, Long> valueCol;
@@ -57,11 +54,7 @@ public class WatchlistController implements IController {
                 setItem(DataType.INT);
             }
         });
-        addrCol.setCellFactory(param -> new SpinnerTableCell<>(addrCol, new AddressSpinner() {
-            {
-                setEditable(true);
-            }
-        }));
+        addrCol.setCellFactory(TextFieldTableCell.forTableColumn());
         descCol.setCellFactory(TextFieldTableCell.forTableColumn());
         valueCol.setCellFactory(param -> new SpinnerTableCell<>(valueCol, new HexSpinner() {
                     {
@@ -105,7 +98,7 @@ public class WatchlistController implements IController {
 
     public void addAddr(long addr) {
         WatchlistModel model = new WatchlistModel();
-        model.setAddr(addr);
+        setAddr(model, addr);
         model.setUpdate(true);
         update(model);
     }
@@ -152,16 +145,16 @@ public class WatchlistController implements IController {
             acquire();
             try {
                 for (WatchlistModel m : watchlistTable.getItems()) {
-                    if (m.getAddr() == 0) {
+                    if (getAddr(m) == 0) {
                         continue;
                     }
                     if (m.canUpdate()) {
-                        long value = mc.getConnection().peek(m.getType(), m.getAddr());
+                        long value = mc.getConnection().peek(m.getType(), getAddr(m));
                         if (m.getValue() != value) {
                             m.setValue(value);
                         }
                     } else if (m.isLocked()) {
-                        mc.getConnection().poke(m.getType(), m.getAddr(), m.getValue());
+                        mc.getConnection().poke(m.getType(), getAddr(m), m.getValue());
                     }
                 }
             } catch (Exception ignored) {
@@ -170,5 +163,13 @@ public class WatchlistController implements IController {
                 release();
             }
         }
+    }
+
+    private void setAddr(WatchlistModel m, long addr){
+        m.setAddr(HexUtils.formatAddress(addr));
+    }
+
+    private long getAddr(WatchlistModel m){
+        return mc.tools().getEvaluator().eval(m.getAddr());
     }
 }

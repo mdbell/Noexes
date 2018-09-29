@@ -305,7 +305,7 @@ public class MainController implements NetworkConstants, IController {
         if (res.succeeded()) {
             setStatus("Resumed");
         } else {
-            setStatus("Unable to resume. Reason:" + res);
+            showMessage("Resume failed", res, Alert.AlertType.WARNING);
         }
     }
 
@@ -314,7 +314,7 @@ public class MainController implements NetworkConstants, IController {
         if (res.succeeded()) {
             setStatus("Paused");
         } else {
-            setStatus("Unable to pause. Reason:" + res);
+            showMessage("Pause failed", res, Alert.AlertType.WARNING);
         }
     }
 

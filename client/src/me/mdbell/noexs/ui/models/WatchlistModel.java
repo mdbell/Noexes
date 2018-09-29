@@ -13,7 +13,7 @@ public class WatchlistModel {
     SimpleBooleanProperty update = new SimpleBooleanProperty();
     SimpleBooleanProperty locked = new SimpleBooleanProperty();
     SimpleStringProperty desc = new SimpleStringProperty("-");
-    SimpleObjectProperty<Long> addr = new SimpleObjectProperty<>(0L);
+    SimpleObjectProperty<String> addr = new SimpleObjectProperty<>("");
     SimpleObjectProperty<Long> value = new SimpleObjectProperty<>(0L);
     SimpleObjectProperty<DataType> type = new SimpleObjectProperty<>(DataType.INT);
 
@@ -42,7 +42,7 @@ public class WatchlistModel {
         return desc;
     }
 
-    public SimpleObjectProperty<Long> addrProperty() {
+    public SimpleObjectProperty<String> addrProperty() {
         return addr;
     }
 
@@ -78,11 +78,11 @@ public class WatchlistModel {
         type.set(t);
     }
 
-    public void setAddr(long addr) {
+    public void setAddr(String addr) {
         this.addr.set(addr);
     }
 
-    public long getAddr() {
+    public String getAddr() {
         return addr.get();
     }
 
