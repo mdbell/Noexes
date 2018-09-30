@@ -19,8 +19,8 @@
         </TableView>
       <Button fx:id="addButton" layoutX="14.0" layoutY="431.0" mnemonicParsing="false" onAction="#onAddAction" text="Add" />
       <Button fx:id="removeButton" disable="true" layoutX="62.0" layoutY="431.0" mnemonicParsing="false" onAction="#onRemoveAction" text="Remove" />
-      <Button disable="true" layoutX="966.0" layoutY="431.0" mnemonicParsing="false" text="Load" />
-      <Button disable="true" layoutX="914.0" layoutY="431.0" mnemonicParsing="false" text="Save" />
-      <Button disable="true" layoutX="131.0" layoutY="431.0" mnemonicParsing="false" text="Clear" />
+      <Button layoutX="966.0" layoutY="431.0" mnemonicParsing="false" onAction="#onLoad" text="Load" />
+      <Button layoutX="914.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
+      <Button layoutX="131.0" layoutY="431.0" mnemonicParsing="false" onAction="#clearList" text="Clear" />
     </children>
 </AnchorPane>

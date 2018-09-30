@@ -13,7 +13,7 @@ public class WatchlistModel {
     SimpleBooleanProperty update = new SimpleBooleanProperty();
     SimpleBooleanProperty locked = new SimpleBooleanProperty();
     SimpleStringProperty desc = new SimpleStringProperty("-");
-    SimpleObjectProperty<String> addr = new SimpleObjectProperty<>("");
+    SimpleObjectProperty<String> addr = new SimpleObjectProperty<>(HexUtils.formatAddress(0));
     SimpleObjectProperty<Long> value = new SimpleObjectProperty<>(0L);
     SimpleObjectProperty<DataType> type = new SimpleObjectProperty<>(DataType.INT);
 

@@ -2,6 +2,7 @@ package me.mdbell.noexs.ui;
 
 import me.mdbell.noexs.io.net.NetworkConstants;
 
+import java.io.File;
 import java.util.prefs.Preferences;
 
 public class Settings {
@@ -13,10 +14,20 @@ public class Settings {
 
     private static final String MEM_VIEW_ENDIAN_KEY = "MEM_ENDIAN";
 
+    private static final String CHOOSE_FILE_KEY = "CHOOSER_FILE";
+
     private static final Preferences prefs = Preferences.userNodeForPackage(Settings.class);
 
     private Settings(){
 
+    }
+
+    public static File getChooserFile(){
+        return new File(prefs.get(CHOOSE_FILE_KEY, "./"));
+    }
+
+    public static void setChooserFile(File f){
+        prefs.put(CHOOSE_FILE_KEY, f.getAbsolutePath());
     }
 
     public static String getConnectionHost(){

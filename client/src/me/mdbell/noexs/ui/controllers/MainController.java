@@ -1,11 +1,13 @@
 package me.mdbell.noexs.ui.controllers;
 
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import me.mdbell.noexs.core.DebuggerStatus;
 import me.mdbell.noexs.core.IConnection;
@@ -20,6 +22,7 @@ import me.mdbell.noexs.ui.Settings;
 import me.mdbell.noexs.ui.models.ConnectionType;
 import me.mdbell.noexs.ui.services.DebuggerConnectionService;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -80,6 +83,8 @@ public class MainController implements NetworkConstants, IController {
 
     private Stage stage;
 
+    private FileChooser fileChooser = new FileChooser();
+
     public void setStage(Stage s) {
         if (stage != null) {
             return;
@@ -89,6 +94,7 @@ public class MainController implements NetworkConstants, IController {
 
     @FXML
     public void initialize() {
+        fileChooser.setInitialDirectory(Settings.getChooserFile());
         controllers.add(this);
         controllers.add(toolsTabPageController);
         controllers.add(memViewTabPageController);
@@ -122,7 +128,7 @@ public class MainController implements NetworkConstants, IController {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(debugger.connected() && autoResume.isSelected()) {
+                if (debugger.connected() && autoResume.isSelected()) {
                     debugger.resume();
                 }
             }
@@ -380,6 +386,24 @@ public class MainController implements NetworkConstants, IController {
         }
         ipAddr.setDisable(disabled);
         connectionType.setDisable(disabled);
+    }
+
+    File browseFile(boolean save, StringProperty property, String title, String desc, String... extensions) {
+        fileChooser.setTitle(title);
+        List<FileChooser.ExtensionFilter> filterList = fileChooser.getExtensionFilters();
+        filterList.clear();
+        filterList.add(new FileChooser.ExtensionFilter(desc, extensions));
+        File f = save ? fileChooser.showSaveDialog(getStage()) : fileChooser.showOpenDialog(getStage());
+
+        if (f != null) {
+            File parent = f.getParentFile();
+            fileChooser.setInitialDirectory(parent);
+            Settings.setChooserFile(parent);
+            if(property != null) {
+                property.setValue(f.toPath().toString());
+            }
+        }
+        return f;
     }
 
     Debugger getConnection() {

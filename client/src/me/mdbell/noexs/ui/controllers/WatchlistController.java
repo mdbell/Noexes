@@ -1,5 +1,8 @@
 package me.mdbell.noexs.ui.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +19,13 @@ import me.mdbell.noexs.ui.models.DataType;
 import me.mdbell.noexs.ui.models.WatchlistModel;
 import me.mdbell.util.HexUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
@@ -37,6 +47,8 @@ public class WatchlistController implements IController {
     private MainController mc;
 
     private Semaphore semaphore = new Semaphore(1);
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 
     @FXML
     public void initialize() {
@@ -134,6 +146,74 @@ public class WatchlistController implements IController {
         semaphore.release();
     }
 
+    public void clearList(ActionEvent event) {
+        watchlistTable.getItems().clear();
+    }
+
+    static class SerializedWatchlistItem {
+        boolean update;
+        boolean locked;
+        String addr;
+        String desc;
+        DataType type;
+        long value;
+
+        protected SerializedWatchlistItem() {
+
+        }
+    }
+
+    public void onSave(ActionEvent event) {
+        File f = mc.browseFile(true, null, "Save As...", "Watchlist File", "*.json");
+        if (f == null) {
+            return;
+        }
+        List<SerializedWatchlistItem> list = new LinkedList<>();
+        watchlistTable.getItems().forEach(item -> {
+            SerializedWatchlistItem sw = new SerializedWatchlistItem();
+            sw.update = item.canUpdate();
+            sw.locked = item.isLocked();
+            sw.addr = item.getAddr();
+            sw.desc = item.getDesc();
+            sw.type = item.getType();
+            sw.value = item.getValue();
+            list.add(sw);
+        });
+        String json = gson.toJson(list);
+        try {
+            Files.write(f.toPath(), json.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onLoad(ActionEvent event) {
+        File f = mc.browseFile(false, null, "Open...", "Watchlist File", "*.json");
+        if(f == null){
+            return;
+        }
+
+        watchlistTable.getItems().clear();
+        Type listOfTestObject = new TypeToken<List<SerializedWatchlistItem>>(){}.getType();
+        try {
+            FileReader reader = new FileReader(f);
+            List<SerializedWatchlistItem> list = gson.fromJson(reader, listOfTestObject);
+            list.forEach( item ->{
+                WatchlistModel model = new WatchlistModel();
+                model.setUpdate(item.update);
+                model.setLocked(item.locked);
+                model.setAddr(item.addr);
+                model.setDesc(item.desc);
+                model.setType(item.type);
+                model.setValue(item.value);
+                watchlistTable.getItems().add(model);
+            });
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private class WatchlistTimerTask extends TimerTask {
 
         @Override
@@ -165,11 +245,11 @@ public class WatchlistController implements IController {
         }
     }
 
-    private void setAddr(WatchlistModel m, long addr){
+    private void setAddr(WatchlistModel m, long addr) {
         m.setAddr(HexUtils.formatAddress(addr));
     }
 
-    private long getAddr(WatchlistModel m){
+    private long getAddr(WatchlistModel m) {
         return mc.tools().getEvaluator().eval(m.getAddr());
     }
 }

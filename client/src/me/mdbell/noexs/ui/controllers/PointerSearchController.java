@@ -1,5 +1,6 @@
 package me.mdbell.noexs.ui.controllers;
 
+import com.google.gson.GsonBuilder;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -74,13 +75,10 @@ public class PointerSearchController implements IController {
 
     private MainController mc;
 
-    private FileChooser fileChooser = new FileChooser();
-
     private final PointerSearchService searchService = new PointerSearchService();
 
     @FXML
     public void initialize() {
-        fileChooser.setInitialDirectory(new File("./"));
         depthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10));
 
         threadsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Runtime.getRuntime().availableProcessors()));
@@ -90,14 +88,14 @@ public class PointerSearchController implements IController {
         offsetSpinner.getValueFactory().setValue(Settings.getPointerOffset());
 
         resultList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null) {
+            if (newValue != null) {
                 resultText.setText(newValue.formatted(relativeAddress.getValue()));
-            }else{
+            } else {
                 resultText.setText("");
             }
         });
 
-        resultList.setCellFactory(param -> new ListCell<>(){
+        resultList.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(PointerSearchResult item, boolean empty) {
                 super.updateItem(item, empty);
@@ -133,7 +131,7 @@ public class PointerSearchController implements IController {
         results.clear();
         long min = filterMinAddress.getValue();
         long max = filterMaxAddress.getValue();
-        if(filterCheckbox.isSelected()) {
+        if (filterCheckbox.isSelected()) {
             List<PointerSearchResult> filtered = new ArrayList<>();
             for (PointerSearchResult result : unfilteredResults) {
                 long addr = result.getAddress();
@@ -142,7 +140,7 @@ public class PointerSearchController implements IController {
                 }
             }
             results.addAll(filtered);
-        }else{
+        } else {
             results.addAll(unfilteredResults);
         }
     }
@@ -159,11 +157,11 @@ public class PointerSearchController implements IController {
     }
 
     public void onBrowseDumpFile(ActionEvent event) {
-        browseFile(dumpFilePath.textProperty(), "Please select a memory dump", "Memory Dump Files", "*.dat");
+        mc.browseFile(false, dumpFilePath.textProperty(), "Please select a memory dump", "Memory Dump Files", "*.dat");
     }
 
     public void onBrowseIndexFile(ActionEvent event) {
-        browseFile(indexFilePath.textProperty(), "Please select an index file", "Memory Dump Index Files", "*.xml");
+        mc.browseFile(false, indexFilePath.textProperty(), "Please select an index file", "Memory Dump Index Files", "*.xml");
     }
 
     public void onSearchAction(ActionEvent event) {
@@ -181,7 +179,7 @@ public class PointerSearchController implements IController {
         });
 
         searchService.setOnSucceeded(event1 -> {
-            Set<PointerSearchResult>results = (Set<PointerSearchResult>) event1.getSource().getValue();
+            Set<PointerSearchResult> results = (Set<PointerSearchResult>) event1.getSource().getValue();
             this.unfilteredResults.clear();
             this.unfilteredResults.addAll(results);
             mc.setStatus("Search Completed!");
@@ -227,20 +225,6 @@ public class PointerSearchController implements IController {
         indexFileButton.setDisable(disabled);
         searchButton.setDisable(disabled);
         cancelButton.setDisable(!disabled);
-    }
-
-    private void browseFile(StringProperty property, String title, String desc, String... extensions) {
-        fileChooser.setTitle(title);
-        List<FileChooser.ExtensionFilter> filterList = fileChooser.getExtensionFilters();
-        filterList.clear();
-        filterList.add(new FileChooser.ExtensionFilter(desc, extensions));
-
-        File f = fileChooser.showOpenDialog(mc.getStage());
-
-        if (f != null) {
-            fileChooser.setInitialDirectory(f.getParentFile());
-            property.setValue(f.toPath().toString());
-        }
     }
 
     public void setFilterMin(long address) {
