@@ -8,8 +8,6 @@ import me.mdbell.util.HexUtils;
 public class HexSpinner extends Spinner<Long> {
 
     private int size;
-    private long mask;
-
 
     public HexSpinner(){
         setValueFactory(new HexValueFactory());
@@ -18,11 +16,6 @@ public class HexSpinner extends Spinner<Long> {
 
     public void setSize(int len) {
         this.size = len;
-        this.mask = 0;
-        for(int i = 0; i < len;i++) {
-            mask <<= 4;
-            mask |= 0xF;
-        }
         getEditor().setText(getValueAsString());
     }
 
@@ -35,7 +28,7 @@ public class HexSpinner extends Spinner<Long> {
         public HexValueFactory() {
             setValue(0L);
             valueProperty().addListener((observable, oldValue, newValue) -> {
-                setValue(newValue & mask);
+                setValue(newValue);
             });
             setConverter(new StringConverter<Long>() {
                 @Override
