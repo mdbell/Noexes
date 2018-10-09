@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -65,11 +64,10 @@
       <Label disable="true" layoutX="16.0" layoutY="275.0" text="Size" />
       <HexSpinner fx:id="downSize" disable="true" editable="true" layoutX="13.0" layoutY="292.0" prefHeight="25.0" prefWidth="168.0" />
       <Button disable="true" layoutX="14.0" layoutY="324.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="168.0" text="Download..." />
-      <TextField disable="true" layoutX="11.0" layoutY="197.0" prefHeight="25.0" prefWidth="168.0" promptText="Pattern" />
-      <Button disable="true" layoutX="112.0" layoutY="232.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Search" />
+      <TextField fx:id="patternTextField" layoutX="11.0" layoutY="197.0" prefHeight="25.0" prefWidth="168.0" promptText="Pattern" />
+      <Button layoutX="112.0" layoutY="232.0" mnemonicParsing="false" onAction="#onPatternSearch" prefHeight="25.0" prefWidth="71.0" text="Search" />
       <Separator layoutX="11.0" layoutY="182.0" prefHeight="6.0" prefWidth="168.0" />
       <Separator layoutX="11.0" layoutY="267.0" prefHeight="6.0" prefWidth="168.0" />
       <Separator layoutX="13.0" layoutY="99.0" prefHeight="6.0" prefWidth="168.0" />
-      <ChoiceBox disable="true" layoutX="11.0" layoutY="232.0" prefHeight="25.0" prefWidth="90.0" />
     </children>
 </AnchorPane>

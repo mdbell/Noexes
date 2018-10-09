@@ -12,10 +12,14 @@ import me.mdbell.javafx.control.AddressSpinner;
 import me.mdbell.javafx.control.FormattedTableCell;
 import me.mdbell.javafx.control.HexSpinner;
 import me.mdbell.noexs.core.Debugger;
+import me.mdbell.noexs.core.MemoryInfo;
 import me.mdbell.noexs.ui.Settings;
 import me.mdbell.noexs.ui.models.DataType;
 import me.mdbell.noexs.ui.models.MemoryViewerTableModel;
 import me.mdbell.util.HexUtils;
+import me.mdbell.util.IPatternMatcher;
+import me.mdbell.util.PatternCompiler;
+import me.mdbell.util.PatternTokenizer;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -25,6 +29,7 @@ import java.util.function.Function;
 public class MemoryViewerController implements IController {
 
     private static final int ROW_COUNT = 100;
+    public TextField patternTextField;
 
     private MainController mainController;
 
@@ -304,9 +309,39 @@ public class MemoryViewerController implements IController {
         mainController.tools().updateMemoryInfo(conn.query(0, 10000));
     }
 
+    PatternTokenizer tokenizer = new PatternTokenizer();
+    PatternCompiler compiler = new PatternCompiler();
+
     public void onPokeAction(ActionEvent event) {
         Debugger debugger = mainController.getConnection();
         debugger.poke(pokeType.getValue(), memViewAddrBox.getValue(), pokeValue.getValue());
         dumpToMemoryViewer(lastAddress);
+    }
+
+    public void onPatternSearch(ActionEvent event) {
+        long address = memViewAddrBox.getValue();
+        if(address == 0) {
+            //TODO say invalid address
+            return;
+        }
+        String str = patternTextField.getText().trim();
+        if(str.length() == 0) {
+            //TODO say invalid pattern
+            return;
+        }
+        PatternCompiler.PatternElement[] elements = tokenizer.eval(str);
+
+        IPatternMatcher matcher = compiler.compile(elements);
+
+        //TODO do this in a service, not here
+        MemoryInfo info = mainController.getConnection().query(address);
+        int size = (int) (mainController.getConnection().query(address).getSize() - (address - info.getAddress()));
+        byte[] bytes = new byte[size];
+        ByteBuffer buffer = mainController.getConnection().readmem(address, size, bytes);
+        int idx = matcher.match(buffer);
+        if(idx != -1) {
+            memViewAddrBox.getValueFactory().setValue(address + idx);
+            dumpToMemoryViewer();
+        }
     }
 }
