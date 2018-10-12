@@ -10,17 +10,34 @@ public interface IConnection extends Closeable {
         writeByte(cmd);
     }
 
-    default Result readResult() {
-        return Result.valueOf(readInt());
-    }
-
     default void write(byte[] b) {
         write(b, 0, b.length);
     }
 
+    void write(byte[] data, int off, int len);
+
+    default void writeLong(long l) {
+        writeInt((int) (l & 0xFFFFFFFFL));
+        writeInt((int) (l >> 32 & 0xFFFFFFFFL));
+    }
+
+    default void writeInt(int i) {
+        int s1 = i & 0xFFFF;
+        int s2 = (i >> 16) & 0xFFFF;
+        byte[] data = {(byte) (s1 & 0xFF), (byte) ((s1 >> 8) & 0xFF), (byte) (s2 & 0xFF), (byte) ((s2 >> 8) & 0xFF)};
+        write(data);
+    }
+
+    default void writeShort(int s) {
+        byte[] data = {(byte) (s & 0xFF), (byte) ((s >> 8) & 0xFF)};
+        write(data);
+    }
+
     void writeByte(int i);
 
-    void write(byte[] data, int off, int len);
+    default Result readResult() {
+        return Result.valueOf(readInt());
+    }
 
     int readByte();
 
@@ -49,21 +66,6 @@ public interface IConnection extends Closeable {
             throw new ConnectionException("Unable to fully read data. Expected 2 bytes, but we only read:" + len);
         }
         return (short) ((data[0] & 0xFF) | (data[1] & 0xFF) << 8);
-    }
-
-    default void writeLong(long l) {
-        writeInt((int) (l & 0xFFFFFFFFL));
-        writeInt((int) (l >> 32 & 0xFFFFFFFFL));
-    }
-
-    default void writeInt(int i) {
-        writeShort(i & 0xFFFF);
-        writeShort((i >> 16) & 0xFFFF);
-    }
-
-    default void writeShort(int s) {
-        writeByte(s & 0xFF);
-        writeByte((s >> 8) & 0xFF);
     }
 
     default int read(byte[] b) {

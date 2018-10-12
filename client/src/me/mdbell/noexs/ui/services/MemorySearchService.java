@@ -348,6 +348,7 @@ public class MemorySearchService extends Service<SearchResult> {
             DumpOutputStream dout;
             try {
                 dump = new MemoryDump(res.getLocation());
+                dump.setTid(conn.getCurrentTitleId());
                 dump.getInfos().addAll(Arrays.asList(conn.query(0,10000)));
                 dout = dump.openStream();
             } catch (IOException e) {

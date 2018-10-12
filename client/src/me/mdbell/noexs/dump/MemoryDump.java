@@ -18,12 +18,25 @@ public class MemoryDump implements Closeable {
     private final Map<DumpIndex, MappedByteBuffer> cache = new ConcurrentHashMap<>();
     private final List<DumpIndex> indices = new ArrayList<>();
     private final List<MemoryInfo> infos = new ArrayList<>();
+    private long tid;
+
+    private ThreadLocal<DumpIndex> prev = ThreadLocal.withInitial(() -> null);
+
+    public MemoryDump(File from) throws IOException {
+        boolean b = from.exists() && from.length() > 0;
+        this.dump = new RandomAccessFile(from, "rw");
+        if (b) {
+            readHeader();
+        } else {
+            writeHeader();
+        }
+    }
 
     void writeHeader() throws IOException {
         long pos = dump.length();
         dump.seek(0);
         dump.writeInt(0x4E444D50); // "NDMP"
-        dump.writeLong(0); // TID
+        dump.writeLong(tid); // TID
         dump.writeInt(infos.size()); // info count
         dump.writeLong(0); // mem-info pointer
         dump.writeInt(indices.size()); // index count
@@ -54,7 +67,7 @@ public class MemoryDump implements Closeable {
         if (dump.readInt() != 0x4E444D50) {
             throw new IOException("File is not a dump! (Invalid magic)");
         }
-        dump.readLong(); // TID
+        tid = dump.readLong(); // TID
 
         int infoCount = dump.readInt();
         long infoPtr = dump.readLong();
@@ -79,16 +92,6 @@ public class MemoryDump implements Closeable {
             infos.add(new MemoryInfo(addr, size, type, perm));
         }
         dump.seek(dataPtr);
-    }
-
-    public MemoryDump(File from) throws IOException {
-        boolean b = from.exists() && from.length() > 0;
-        this.dump = new RandomAccessFile(from, "rw");
-        if (b) {
-            readHeader();
-        } else {
-            writeHeader();
-        }
     }
 
     public DumpOutputStream openStream() {
@@ -182,7 +185,14 @@ public class MemoryDump implements Closeable {
         }
     }
 
-    private ThreadLocal<DumpIndex> prev = ThreadLocal.withInitial(() -> null);
+
+    public long getTid(){
+        return tid;
+    }
+
+    public void setTid(long tid){
+        this.tid = tid;
+    }
 
     public DumpIndex getIndex(long addr) {
         DumpIndex prev = this.prev.get();
