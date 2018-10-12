@@ -17,8 +17,8 @@ public class NoexesFiles {
         }
     }
 
-    public static File createTempFile() throws IOException {
-        File res = new File(tmp, "" + System.currentTimeMillis());
+    public static File createTempFile(String ext) throws IOException {
+        File res = new File(tmp, "" + System.currentTimeMillis() + "." + ext);
         res.createNewFile();
         return res;
     }

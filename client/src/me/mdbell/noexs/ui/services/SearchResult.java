@@ -28,8 +28,8 @@ public final class SearchResult implements Closeable {
 
     private SearchResult prev;
 
-    public SearchResult() {
-        this.location = NoexesFiles.createTempDir();
+    public SearchResult() throws IOException {
+        this.location = NoexesFiles.createTempFile("dmp");
     }
 
     public File getLocation() {

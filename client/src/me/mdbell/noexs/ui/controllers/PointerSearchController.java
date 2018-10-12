@@ -41,12 +41,6 @@ public class PointerSearchController implements IController {
     TextField dumpFilePath;
 
     @FXML
-    Button indexFileButton;
-
-    @FXML
-    TextField indexFilePath;
-
-    @FXML
     TextField resultText;
 
     @FXML
@@ -107,7 +101,6 @@ public class PointerSearchController implements IController {
             }
         });
 
-        indexFilePath.textProperty().addListener((observable, oldValue, newValue) -> updateSearchButton());
         dumpFilePath.textProperty().addListener((observable, oldValue, newValue) -> updateSearchButton());
 
         searchService.messageProperty().addListener((observable, oldValue, newValue) -> mc.setStatus(newValue));
@@ -146,9 +139,8 @@ public class PointerSearchController implements IController {
     }
 
     private void updateSearchButton() {
-        String index = indexFilePath.getText();
-        String dump = indexFilePath.getText();
-        searchButton.setDisable(index.length() == 0 || dump.length() == 0);
+        String dump = dumpFilePath.getText();
+        searchButton.setDisable(dump.length() == 0);
     }
 
     @Override
@@ -157,16 +149,11 @@ public class PointerSearchController implements IController {
     }
 
     public void onBrowseDumpFile(ActionEvent event) {
-        mc.browseFile(false, dumpFilePath.textProperty(), "Please select a memory dump", "Memory Dump Files", "*.dat");
-    }
-
-    public void onBrowseIndexFile(ActionEvent event) {
-        mc.browseFile(false, indexFilePath.textProperty(), "Please select an index file", "Memory Dump Index Files", "*.xml");
+        mc.browseFile(false, dumpFilePath.textProperty(), "Please select a memory dump", "Memory Dump Files", "*.dmp");
     }
 
     public void onSearchAction(ActionEvent event) {
         searchService.setDumpPath(Paths.get(dumpFilePath.getText()));
-        searchService.setIndexPath(Paths.get(indexFilePath.getText()));
         searchService.setMaxDepth(depthSpinner.getValue());
         searchService.setMaxOffset(offsetSpinner.getValue());
         searchService.setAddress(addressSpinner.getValue());
@@ -222,7 +209,6 @@ public class PointerSearchController implements IController {
         threadsSpinner.setDisable(disabled);
         offsetSpinner.setDisable(disabled);
         dumpFileButton.setDisable(disabled);
-        indexFileButton.setDisable(disabled);
         searchButton.setDisable(disabled);
         cancelButton.setDisable(!disabled);
     }

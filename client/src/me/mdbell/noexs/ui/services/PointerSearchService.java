@@ -16,7 +16,7 @@ import java.util.concurrent.Semaphore;
 
 public class PointerSearchService extends Service<Set<PointerSearchResult>> {
 
-    private Path dumpPath, indexPath;
+    private Path dumpPath;
     private long maxOffset, address;
     private int maxDepth, threadCount;
 
@@ -25,9 +25,6 @@ public class PointerSearchService extends Service<Set<PointerSearchResult>> {
         this.dumpPath = dumpPath;
     }
 
-    public void setIndexPath(Path indexPath) {
-        this.indexPath = indexPath;
-    }
 
     public void setMaxOffset(long maxOffset) {
         this.maxOffset = maxOffset;
@@ -50,9 +47,8 @@ public class PointerSearchService extends Service<Set<PointerSearchResult>> {
         return new SearchTask();
     }
 
-    private MemoryDump openDump(Path dumpPath, Path indexPath) throws IOException {
-        List<DumpIndex> indices = IndexSerializer.read(indexPath);
-        return new MemoryDump(dumpPath.toFile(), indices);
+    private MemoryDump openDump(Path dumpPath) throws IOException {
+        return new MemoryDump(dumpPath.toFile());
     }
 
     private class SearchTask extends Task<Set<PointerSearchResult>> {
@@ -74,7 +70,7 @@ public class PointerSearchService extends Service<Set<PointerSearchResult>> {
         protected Set<PointerSearchResult> call() throws Exception {
             ForkJoinPool pool = new ForkJoinPool(threadCount);
             try {
-                MemoryDump dump = openDump(dumpPath, indexPath);
+                MemoryDump dump = openDump(dumpPath);
                 List<PointerSearchResult>[] results = new List[maxDepth];
                 total = dump.getSize() * maxDepth;
                 for (depth = 0; depth < maxDepth && !isCancelled(); depth++) {

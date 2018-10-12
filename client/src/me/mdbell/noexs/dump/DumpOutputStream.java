@@ -47,7 +47,7 @@ public class DumpOutputStream extends OutputStream {
             curr.size = dataFile.getFilePointer() - curr.filePos;
             indices.add(curr);
         }
+        from.writeHeader();
         dataFile = null;
-        from.saveIndices();
     }
 }

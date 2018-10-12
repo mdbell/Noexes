@@ -1,5 +1,6 @@
 package me.mdbell.noexs.dump;
 
+import me.mdbell.noexs.core.MemoryInfo;
 import me.mdbell.noexs.misc.IndexSerializer;
 import me.mdbell.util.HexUtils;
 
@@ -16,43 +17,104 @@ public class MemoryDump implements Closeable {
     private final RandomAccessFile dump;
     private final Map<DumpIndex, MappedByteBuffer> cache = new ConcurrentHashMap<>();
     private final List<DumpIndex> indices = new ArrayList<>();
-    private final File location;
+    private final List<MemoryInfo> infos = new ArrayList<>();
 
-    public MemoryDump(File where) throws IOException {
-        location = where;
-        File data = new File(where,"dump.dat");
-        dump = new RandomAccessFile(data, "rw");
+    void writeHeader() throws IOException {
+        long pos = dump.length();
+        dump.seek(0);
+        dump.writeInt(0x4E444D50); // "NDMP"
+        dump.writeLong(0); // TID
+        dump.writeInt(infos.size()); // info count
+        dump.writeLong(0); // mem-info pointer
+        dump.writeInt(indices.size()); // index count
+        dump.writeLong(pos); // pointer to index data
+        dump.seek(pos);
+        for (int i = 0; i < indices.size(); i++) {
+            DumpIndex idx = indices.get(i);
+            dump.writeLong(idx.addr);
+            dump.writeLong(idx.filePos);
+            dump.writeLong(idx.size);
+        }
+        pos = dump.getFilePointer();
+        for(int i = 0; i < infos.size(); i++) {
+            MemoryInfo info = infos.get(i);
+            dump.writeLong(info.getAddress());
+            dump.writeLong(info.getSize());
+            dump.writeInt(info.getType().getType());
+            dump.writeInt(info.getPerm());
+        }
+        dump.seek(0x10); // mem-info pointer (again)
+        dump.writeLong(pos);
+
+        dump.seek(0x32); // seek back to data
     }
 
-    public MemoryDump(File from, List<DumpIndex> indices) throws FileNotFoundException {
-        this.location = from.getParentFile();
+    private void readHeader() throws IOException {
+        dump.seek(0);
+        if (dump.readInt() != 0x4E444D50) {
+            throw new IOException("File is not a dump! (Invalid magic)");
+        }
+        dump.readLong(); // TID
+
+        int infoCount = dump.readInt();
+        long infoPtr = dump.readLong();
+
+        int idxCount = dump.readInt();
+        long idxPtr = dump.readLong();
+        long dataPtr = dump.getFilePointer();
+        dump.seek(idxPtr);
+        for (int i = 0; i < idxCount; i++) {
+            long addr = dump.readLong();
+            long pos = dump.readLong();
+            long size = dump.readLong();
+            indices.add(new DumpIndex(addr, pos, size));
+        }
+
+        dump.seek(infoPtr);
+        for(int i = 0; i < infoCount; i++) {
+            long addr = dump.readLong();
+            long size = dump.readLong();
+            int type = dump.readInt();
+            int perm = dump.readInt();
+            infos.add(new MemoryInfo(addr, size, type, perm));
+        }
+        dump.seek(dataPtr);
+    }
+
+    public MemoryDump(File from) throws IOException {
+        boolean b = from.exists() && from.length() > 0;
         this.dump = new RandomAccessFile(from, "rw");
-        this.indices.addAll(indices);
+        if (b) {
+            readHeader();
+        } else {
+            writeHeader();
+        }
     }
 
     public DumpOutputStream openStream() {
         return new DumpOutputStream(this, indices, dump);
     }
 
-    protected void saveIndices() throws IOException {
-        IndexSerializer.write(indices, new File(location, "indices.xml").toPath());
-    }
-
     @Override
     public void close() throws IOException {
+        writeHeader();
         cache.clear();
         indices.clear();
         dump.close();
         System.gc();
     }
 
-    public List<DumpIndex> getIndices(){
+    public List<MemoryInfo> getInfos(){
+        return infos;
+    }
+
+    public List<DumpIndex> getIndices() {
         return Collections.unmodifiableList(indices);
     }
 
-    public List<DumpRegion> getIndicesAsRegions(){
+    public List<DumpRegion> getIndicesAsRegions() {
         List<DumpRegion> res = new ArrayList<>();
-        for(DumpIndex idx : indices) {
+        for (DumpIndex idx : indices) {
             res.add(new DumpRegion(idx.getAddress(), idx.getEndAddress()));
         }
         return res;
@@ -73,7 +135,7 @@ public class MemoryDump implements Closeable {
         return min;
     }
 
-    public long getEnd(){
+    public long getEnd() {
         long max = 0;
         for (DumpIndex idx : getIndices()) {
             long addr = idx.addr + idx.size;
@@ -105,24 +167,24 @@ public class MemoryDump implements Closeable {
     }
 
     public long getValue(long addr, int size) throws IOException {
-            ByteBuffer buffer = getBuffer(addr);
-            switch (size) {
-                case 1:
-                    return buffer.get() & 0xFF;
-                case 2:
-                    return buffer.getShort() & 0xFFFF;
-                case 4:
-                    return buffer.getInt() & 0xFFFFFFFFL;
-                case 8:
-                    return buffer.getLong();
-                default:
-                    throw new UnsupportedOperationException("invalid size:" + size);
-            }
+        ByteBuffer buffer = getBuffer(addr);
+        switch (size) {
+            case 1:
+                return buffer.get() & 0xFF;
+            case 2:
+                return buffer.getShort() & 0xFFFF;
+            case 4:
+                return buffer.getInt() & 0xFFFFFFFFL;
+            case 8:
+                return buffer.getLong();
+            default:
+                throw new UnsupportedOperationException("invalid size:" + size);
+        }
     }
 
     private ThreadLocal<DumpIndex> prev = ThreadLocal.withInitial(() -> null);
 
-    public DumpIndex getIndex(long addr){
+    public DumpIndex getIndex(long addr) {
         DumpIndex prev = this.prev.get();
         if (prev != null && addr >= prev.addr && addr < prev.addr + prev.size) {
             return prev;

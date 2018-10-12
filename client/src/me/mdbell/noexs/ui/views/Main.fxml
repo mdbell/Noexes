@@ -29,8 +29,8 @@
                 <Label fx:id="statusLbl" layoutX="69.0" layoutY="23.0" text="Ready" />
                 <Separator layoutX="57.0" layoutY="22.0" orientation="VERTICAL" prefHeight="17.0" prefWidth="10.0" />
                 <Label fx:id="progressLabel" layoutX="575.0" layoutY="43.0" text="0%" />
-                <Button fx:id="pauseBtn" layoutX="289.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="Pause Game" />
-                <Button layoutX="379.0" layoutY="11.0" mnemonicParsing="false" onAction="#continueProcess" text="Resume Game" />
+                <Button fx:id="pauseBtn" layoutX="357.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="Pause" />
+                <Button layoutX="411.0" layoutY="12.0" mnemonicParsing="false" onAction="#continueProcess" text="Resume" />
             <ChoiceBox fx:id="connectionType" layoutX="622.0" layoutY="39.0" prefHeight="25.0" prefWidth="107.0" />
             <CheckBox fx:id="autoResume" layoutX="477.0" layoutY="15.0" mnemonicParsing="false" text="Auto Resume" />
             </children>

@@ -22,8 +22,12 @@ public class Settings {
 
     }
 
-    public static File getChooserFile(){
-        return new File(prefs.get(CHOOSE_FILE_KEY, "./"));
+    public static File getChooserDir(){
+        File f = new File(prefs.get(CHOOSE_FILE_KEY, "./"));
+        if(!f.exists()) {
+            f = new File("./");
+        }
+        return f;
     }
 
     public static void setChooserFile(File f){

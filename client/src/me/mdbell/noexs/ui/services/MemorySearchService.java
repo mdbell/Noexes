@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -100,11 +101,7 @@ public class MemorySearchService extends Service<SearchResult> {
 
     private List<Long> createList(File where) {
         try {
-            File f;
-            do {
-                f = new File(where, System.currentTimeMillis() + ".addrs");
-            } while (f.exists());
-            return MappedList.createLongList(new RandomAccessFile(f, "rw"));
+            return MappedList.createLongList(new RandomAccessFile(NoexesFiles.createTempFile("addrs"), "rw"));
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -185,7 +182,7 @@ public class MemorySearchService extends Service<SearchResult> {
             res.type = type;
             res.dataType = dataType;
             res.setPrev(prevResult);
-            res.addresses = createList(res.getLocation());
+            res.addresses = createList(NoexesFiles.createTempFile("addrs"));
             if (prevResult != null) {
                 refineSearch();
             } else {
@@ -214,14 +211,14 @@ public class MemorySearchService extends Service<SearchResult> {
             res.curr = createDump(res, supplier);
             total = prevResult.curr.getSize();
 
-            if(prevResult.addresses.size() == 0) {
+            if (prevResult.addresses.size() == 0) {
                 return;
             }
 
             Iterator<Long> addrs = prevResult.addresses.iterator();
             Long addr = addrs.next();
             for (DumpIndex idx : res.curr.getIndices()) {
-                if(!addrs.hasNext() || isCancelled()) {
+                if (!addrs.hasNext() || isCancelled()) {
                     break;
                 }
                 ByteBuffer buffer = res.curr.getBuffer(idx);
@@ -235,7 +232,7 @@ public class MemorySearchService extends Service<SearchResult> {
                             addAddress(addr);
                         }
                         addr = addrs.next();
-                    }else while (l > addr && addrs.hasNext()){
+                    } else while (l > addr && addrs.hasNext()) {
                         addr = addrs.next();
                     }
                 }
@@ -351,6 +348,7 @@ public class MemorySearchService extends Service<SearchResult> {
             DumpOutputStream dout;
             try {
                 dump = new MemoryDump(res.getLocation());
+                dump.getInfos().addAll(Arrays.asList(conn.query(0,10000)));
                 dout = dump.openStream();
             } catch (IOException e) {
                 e.printStackTrace();

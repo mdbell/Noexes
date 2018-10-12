@@ -16,7 +16,6 @@ import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.Result;
 import me.mdbell.noexs.misc.NopConnection;
 import me.mdbell.noexs.misc.ResultDecoder;
-import me.mdbell.noexs.io.net.SocketConnection;
 import me.mdbell.noexs.ui.NoexsApplication;
 import me.mdbell.noexs.ui.Settings;
 import me.mdbell.noexs.ui.models.ConnectionType;
@@ -26,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
@@ -94,7 +92,7 @@ public class MainController implements NetworkConstants, IController {
 
     @FXML
     public void initialize() {
-        fileChooser.setInitialDirectory(Settings.getChooserFile());
+        fileChooser.setInitialDirectory(Settings.getChooserDir());
         controllers.add(this);
         controllers.add(toolsTabPageController);
         controllers.add(memViewTabPageController);
