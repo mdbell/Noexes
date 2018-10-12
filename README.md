@@ -73,5 +73,5 @@ This project is licensed under GNU General Public License v3.0 - see the [LICENS
 
 ## Acknowledgments
 
-* L0nk, dcx0 and a bunch of others from the old WiiRd fourms
+* L0nk, dcx2 and a bunch of others from the old WiiRd fourms
 * roblabla for their near endless help, and for putting up with my inane questions
