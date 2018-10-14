@@ -238,7 +238,6 @@ public class WatchlistController implements IController {
                     }
                 }
             } catch (Exception ignored) {
-
             } finally {
                 release();
             }

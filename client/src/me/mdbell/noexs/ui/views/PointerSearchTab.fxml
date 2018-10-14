@@ -41,7 +41,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TextField fx:id="resultText" editable="false" layoutX="14.0" layoutY="252.0" prefHeight="25.0" prefWidth="347.0" />
-                  <ListView fx:id="resultList" layoutX="14.0" layoutY="14.0" prefHeight="232.0" prefWidth="968.0" />
+                  <ListView fx:id="resultList" layoutX="14.0" layoutY="14.0" prefHeight="232.0" prefWidth="966.0" />
                   <CheckBox fx:id="filterCheckbox" layoutX="555.0" layoutY="256.0" mnemonicParsing="false" text="Filter" />
                   <AddressSpinner fx:id="filterMaxAddress" disable="true" editable="true" layoutX="827.0" layoutY="252.0" />
                   <AddressSpinner fx:id="filterMinAddress" disable="true" editable="true" layoutX="643.0" layoutY="252.0" />

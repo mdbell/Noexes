@@ -6,6 +6,13 @@
         <element id="module-output" name="JNoexsClient" />
         <element id="module-output" name="Utils" />
       </element>
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/usb4java/usb4java-javax/1.2.0/usb4java-javax-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/usb/usb-api/1.0.2/usb-api-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/usb4java/usb4java/1.2.0/usb4java-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/usb4java/libusb4java/1.2.0/libusb4java-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

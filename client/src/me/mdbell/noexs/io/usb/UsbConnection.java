@@ -1,4 +1,4 @@
-package me.mdbell.noexs.io;
+package me.mdbell.noexs.io.usb;
 
 import me.mdbell.noexs.core.ConnectionException;
 import me.mdbell.noexs.core.IConnection;

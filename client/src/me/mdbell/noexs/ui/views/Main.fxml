@@ -25,9 +25,7 @@
                         <ColorAdjust hue="-0.52" />
                     </effect>
                 </ProgressBar>
-                <Label layoutX="20.0" layoutY="23.0" text="Status" />
-                <Label fx:id="statusLbl" layoutX="69.0" layoutY="23.0" text="Ready" />
-                <Separator layoutX="57.0" layoutY="22.0" orientation="VERTICAL" prefHeight="17.0" prefWidth="10.0" />
+                <Label fx:id="statusLbl" layoutX="14.0" layoutY="24.0" text="Ready" />
                 <Label fx:id="progressLabel" layoutX="575.0" layoutY="43.0" text="0%" />
                 <Button fx:id="pauseBtn" layoutX="357.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="Pause" />
                 <Button layoutX="411.0" layoutY="12.0" mnemonicParsing="false" onAction="#continueProcess" text="Resume" />

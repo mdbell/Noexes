@@ -20,6 +20,7 @@ import me.mdbell.util.HexUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 
@@ -52,15 +53,17 @@ public class ToolsController implements IController {
 
     private ObservableList<MemoryInfoTableModel> memoryInfoList;
 
+    private final Map<String, Long> vars = new ConcurrentHashMap<>();
+
     private final ExpressionEvaluator evaluator = new ExpressionEvaluator(new ExpressionEvaluator.VariableProvider() {
         @Override
         public long get(String name) {
-            return memoryInfoList.filtered(memoryInfoTableModel -> memoryInfoTableModel.nameProperty().get().equals(name)).get(0).getAddr();
+            return vars.get(name);
         }
 
         @Override
         public boolean containsVar(String value) {
-            return memoryInfoList.filtered(memoryInfoTableModel -> memoryInfoTableModel.nameProperty().get().equals(value)).size() > 0;
+            return vars.containsKey(value);
         }
     }, addr -> mc.getConnection().peek64(addr));
 
@@ -185,8 +188,13 @@ public class ToolsController implements IController {
             }
         }
         int mod = 0;
+        boolean heap = false;
         for (MemoryInfo m : info) {
             String name = "-";
+            if(m.getType() == MemoryType.HEAP && !heap) {
+                heap = true;
+                name = "heap";
+            }
             if (m.getType() == MemoryType.CODE_STATIC && m.getPerm() == 0b101) {
                 if (mod == 0 && moduleCount == 1) {
                     name = "main";
@@ -207,6 +215,9 @@ public class ToolsController implements IController {
                     }
                 }
                 mod++;
+            }
+            if(!name.equals("-")) {
+                vars.put(name, m.getAddress());
             }
             if (m.getType() != MemoryType.UNMAPPED) {
                 memoryInfoList.add(new MemoryInfoTableModel(name, m));

@@ -34,18 +34,16 @@ public class ExpressionEvaluator {
         }
     }
 
-    private final List<Token> tokens;
     private final VariableProvider vars;
     private final MemoryProvider mem;
 
     public ExpressionEvaluator(VariableProvider variables, MemoryProvider mem) {
         this.vars = variables;
         this.mem = mem;
-        tokens = new LinkedList<>();
     }
 
     public long eval(String str) {
-        setup(str);
+        List<Token> tokens = setup(str);
         Stack<Long> values = new Stack<>();
         Stack<Character> ops = new Stack<>();
         for (Token t : tokens) {
@@ -75,15 +73,14 @@ public class ExpressionEvaluator {
         return values.pop();
     }
 
-    private void setup(String str) {
+    private List<Token> setup(String str) {
         Iterator<Character> itr = Collections.iterator(Objects.requireNonNull(str));
         //parse into tokens
         List<Token> tokens = getTokens(itr);
         //verify the tokens
         verifyFormatting(tokens);
         //if valid format, set tokens
-        this.tokens.clear();
-        this.tokens.addAll(tokens);
+        return tokens;
     }
 
     private Long evalOp(Character type, Long v1, Long v2) {
