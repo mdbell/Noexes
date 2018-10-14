@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" build-on-make="true" name="JNoexsClient:jar">
+  <artifact build-on-make="true" name="JNoexsClient:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/JNoexsClient_jar</output-path>
     <root id="root">
       <element id="archive" name="JNoexsClient.jar">
