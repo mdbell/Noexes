@@ -73,6 +73,9 @@ public class MainController implements NetworkConstants, IController {
     @FXML
     WatchlistController watchlistTabPageController;
 
+    @FXML
+    UtilsController utilsTabPageController;
+
     private final List<IController> controllers = new LinkedList<>();
 
     private final DebuggerConnectionService connectionService = new DebuggerConnectionService();
@@ -100,6 +103,7 @@ public class MainController implements NetworkConstants, IController {
         controllers.add(disassembleTabPageController);
         controllers.add(pointerTabPageController);
         controllers.add(watchlistTabPageController);
+        controllers.add(utilsTabPageController);
 
         fire(c -> c.setMainController(this));
         fire(IController::onDisconnect);
@@ -404,7 +408,7 @@ public class MainController implements NetworkConstants, IController {
         return f;
     }
 
-    Debugger getConnection() {
+    Debugger getDebugger() {
         return debugger;
     }
 

@@ -244,7 +244,7 @@ public class SearchController implements IController {
         List<SearchValueModel> models = searchResults.getSelectionModel().getSelectedItems();
         long value = pokeValue.getValue();
         DataType t = dataTypeDropdown.getSelectionModel().getSelectedItem();
-        Debugger debugger = mc.getConnection();
+        Debugger debugger = mc.getDebugger();
         for (int i = 0; i < models.size(); i++) {
             SearchValueModel m = models.get(i);
             debugger.poke(t, m.getAddr(), value);
@@ -285,8 +285,8 @@ public class SearchController implements IController {
 
         SearchType type = searchConditionTypeDropdown.getValue();
         ConditionType compareType = searchConditionDropdown.getValue();
-        searchService.setConnection(mc.getConnection());
-        searchService.setSupplier(getDumpRegionSupplier(mc.getConnection()));
+        searchService.setConnection(mc.getDebugger());
+        searchService.setSupplier(getDumpRegionSupplier(mc.getDebugger()));
 
         initSearch(type, compareType, dataType, known);
     }

@@ -18,10 +18,8 @@ import me.mdbell.noexs.ui.menus.MemoryInfoContextMenu;
 import me.mdbell.noexs.ui.models.MemoryInfoTableModel;
 import me.mdbell.util.HexUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 
 public class ToolsController implements IController {
@@ -65,7 +63,13 @@ public class ToolsController implements IController {
         public boolean containsVar(String value) {
             return vars.containsKey(value);
         }
-    }, addr -> mc.getConnection().peek64(addr));
+    }, addr -> {
+        Debugger debugger = mc.getDebugger();
+        if(!debugger.connected()) {
+            return 0;
+        }
+        return debugger.peek64(addr);
+    });
 
     @FXML
     public void initialize() {
@@ -100,7 +104,7 @@ public class ToolsController implements IController {
             if (newValue == null) {
                 return;
             }
-            displayTitleId(mc.getConnection().getTitleId(newValue));
+            displayTitleId(mc.getDebugger().getTitleId(newValue));
         });
 
         MemoryInfoContextMenu cm = new MemoryInfoContextMenu(() -> mc, memInfoTable);
@@ -123,7 +127,7 @@ public class ToolsController implements IController {
 
     public void setPidsList() {
         pidList.getItems().clear();
-        Debugger debugger = mc.getConnection();
+        Debugger debugger = mc.getDebugger();
         if (debugger.connected()) {
             for (long pid : debugger.getPids()) {
                 pidList.getItems().add(pid);
@@ -134,7 +138,7 @@ public class ToolsController implements IController {
     }
 
     public void detachProcess() {
-        Debugger conn = mc.getConnection();
+        Debugger conn = mc.getDebugger();
         if (conn.connected() && conn.attached()) {
             Result result = conn.detach();
             if (result.succeeded()) {
@@ -151,7 +155,7 @@ public class ToolsController implements IController {
     }
 
     public void attachProcess() {
-        Debugger conn = mc.getConnection();
+        Debugger conn = mc.getDebugger();
         if (conn.connected()) {
             long selectedPid = pidList.getSelectionModel().getSelectedItem();
 

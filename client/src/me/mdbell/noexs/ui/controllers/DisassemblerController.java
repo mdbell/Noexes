@@ -57,7 +57,7 @@ public class DisassemblerController implements IController {
         byte[] buffer = new byte[2048];
         long addr = visibleAddress.getValue();
 
-        ByteBuffer byteBuffer = mc.getConnection().readmem(addr, buffer.length, buffer).order(ByteOrder.LITTLE_ENDIAN);
+        ByteBuffer byteBuffer = mc.getDebugger().readmem(addr, buffer.length, buffer).order(ByteOrder.LITTLE_ENDIAN);
         instructionList.getItems().clear();
         try {
             List<CsToolWrapper.Insn> insns = CsToolWrapper.disasm(buffer, addr);
@@ -104,7 +104,7 @@ public class DisassemblerController implements IController {
             if(b == null) {
                 return;
             }
-            Result r = mc.getConnection().writemem(b, addr);
+            Result r = mc.getDebugger().writemem(b, addr);
             System.out.println(r);
             if(r.succeeded()) {
                 updateView();

@@ -1,7 +1,5 @@
 package me.mdbell.noexs.ui.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -152,7 +150,7 @@ public class MemoryViewerController implements IController {
             long addr = getSelectedAddress();
             memViewAddrBox.getValueFactory().setValue(addr);
             if(addr != 0) {
-                pokeValue.getValueFactory().setValue(mainController.getConnection().peek(pokeType.getValue(), addr));
+                pokeValue.getValueFactory().setValue(mainController.getDebugger().peek(pokeType.getValue(), addr));
             }
         });
 
@@ -206,7 +204,7 @@ public class MemoryViewerController implements IController {
 
         long base = updateAddr & ~0xF;
         lastAddress = base;
-        Debugger conn = mainController.getConnection();
+        Debugger conn = mainController.getDebugger();
         int size = ROW_COUNT * 16;
         ByteBuffer data = conn.readmem(base, size, new byte[size]);
         if(swap){
@@ -282,7 +280,7 @@ public class MemoryViewerController implements IController {
         mc.timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (refreshCheckbox.isSelected() && mc.getConnection().connected()
+                if (refreshCheckbox.isSelected() && mc.getDebugger().connected()
                         && mc.getCurrentTab() == MainController.Tab.MEMORY_VIEWER) {
                     mc.runAndWait(() -> dumpToMemoryViewer(lastAddress));
                 }
@@ -301,7 +299,7 @@ public class MemoryViewerController implements IController {
     }
 
     public void populateMemory() {
-        Debugger conn = mainController.getConnection();
+        Debugger conn = mainController.getDebugger();
         if (!conn.connected()) {
             return;
         }
@@ -313,7 +311,7 @@ public class MemoryViewerController implements IController {
     PatternCompiler compiler = new PatternCompiler();
 
     public void onPokeAction(ActionEvent event) {
-        Debugger debugger = mainController.getConnection();
+        Debugger debugger = mainController.getDebugger();
         debugger.poke(pokeType.getValue(), memViewAddrBox.getValue(), pokeValue.getValue());
         dumpToMemoryViewer(lastAddress);
     }
@@ -334,10 +332,10 @@ public class MemoryViewerController implements IController {
         IPatternMatcher matcher = compiler.compile(elements);
 
         //TODO do this in a service, not here
-        MemoryInfo info = mainController.getConnection().query(address);
-        int size = (int) (mainController.getConnection().query(address).getSize() - (address - info.getAddress()));
+        MemoryInfo info = mainController.getDebugger().query(address);
+        int size = (int) (mainController.getDebugger().query(address).getSize() - (address - info.getAddress()));
         byte[] bytes = new byte[size];
-        ByteBuffer buffer = mainController.getConnection().readmem(address, size, bytes);
+        ByteBuffer buffer = mainController.getDebugger().readmem(address, size, bytes);
         int idx = matcher.match(buffer);
         if(idx != -1) {
             memViewAddrBox.getValueFactory().setValue(address + idx);

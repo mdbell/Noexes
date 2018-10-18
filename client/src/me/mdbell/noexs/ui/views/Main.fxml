@@ -66,6 +66,11 @@
                         <fx:include fx:id="disassembleTabPage" source="DisassemblerTab.fxml" />
                     </content>
                 </Tab>
+                <Tab fx:id="utilsTab" text="Utils">
+                    <content>
+                        <fx:include fx:id="utilsTabPage" source="UtilsTab.fxml" />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </children>

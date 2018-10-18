@@ -218,7 +218,7 @@ public class WatchlistController implements IController {
 
         @Override
         public void run() {
-            Debugger debugger = mc.getConnection();
+            Debugger debugger = mc.getDebugger();
             if (!debugger.connected()) {
                 return;
             }
@@ -229,12 +229,12 @@ public class WatchlistController implements IController {
                         continue;
                     }
                     if (m.canUpdate()) {
-                        long value = mc.getConnection().peek(m.getType(), getAddr(m));
+                        long value = mc.getDebugger().peek(m.getType(), getAddr(m));
                         if (m.getValue() != value) {
                             m.setValue(value);
                         }
                     } else if (m.isLocked()) {
-                        mc.getConnection().poke(m.getType(), getAddr(m), m.getValue());
+                        mc.getDebugger().poke(m.getType(), getAddr(m), m.getValue());
                     }
                 }
             } catch (Exception ignored) {
