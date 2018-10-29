@@ -71,7 +71,7 @@ Result Gecko::Debugger::detatch(){
 Result Gecko::Debugger::resume(){
     RETURN_NOT_ATTACHED();
     flushEvents();
-    return svcContinueDebugEvent(handle, 4 | 2 | 1, 0);
+    return svcContinueDebugEvent(handle, 4 | 2 | 1, 0, 0);
 }
 
 Result Gecko::Debugger::pause(){
