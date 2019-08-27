@@ -29,7 +29,7 @@ dependencies {
 
 javafx {
     version = "12.0.2"
-    modules = ["javafx.controls", "javafx.fxml" ]
+    modules = ["javafx.base", "javafx.graphics", "javafx.controls", "javafx.fxml"]
 }
 
 jlink {
