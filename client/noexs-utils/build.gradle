@@ -29,7 +29,4 @@ jar {
             'Class-Path': configurations.runtime.collect { it.getName() }.join(' ')
         )
     }
-    // from {
-    //     configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    // }
 }

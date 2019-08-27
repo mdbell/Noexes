@@ -30,8 +30,8 @@ jlink {
     options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
     launcher {
         name = "noexs"
-        //jvmArgs = ['-Dlog4j.configurationFile=./log4j2.xml']
     }
+    imageZip = file("$buildDir/image-zip/noexs.zip")
 }
 
 jar {
@@ -46,7 +46,4 @@ jar {
             'Class-Path': configurations.runtime.collect { it.getName() }.join(' ')
         )
     }
-    // from {
-    //     configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    // }
 }
