@@ -1,0 +1,35 @@
+plugins {
+    id "java-library"
+    id "idea"
+    id "org.openjfx.javafxplugin" version "0.0.8"
+}
+
+configure(project) {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation "org.ow2.asm:asm:7.1"
+}
+
+javafx {
+    version = "11.0.2"
+    modules = ["javafx.base", "javafx.graphics", "javafx.controls", "javafx.fxml"]
+}
+
+jar {
+    archiveFileName = 'noexs-utils.jar'
+
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Vendor': project.group,
+            'Implementation-Version': project.version,
+            'Class-Path': configurations.runtime.collect { it.getName() }.join(' ')
+        )
+    }
+    // from {
+    //     configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    // }
+}

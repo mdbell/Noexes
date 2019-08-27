@@ -1,4 +1,4 @@
-module noexs {
+module noexs.app {
     requires noexs.utils;
     requires java.sql;
     requires java.desktop;

@@ -1,4 +1,4 @@
-rootProject.name = 'client'
+rootProject.name = 'noexs'
 
-include ':client-app'
-include ':client-utils'
+include ':noexs-app'
+include ':noexs-utils'
