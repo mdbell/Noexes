@@ -1,0 +1,45 @@
+plugins {
+    id "java"
+    id "idea"
+    id "application"
+    id "org.openjfx.javafxplugin" version "0.0.8"
+    id "org.beryx.jlink" version "2.12.0"
+}
+
+configure(project) {
+    group = "me.mdbell.noexs"
+    version = "1.1.2"
+    description = "A graphical remote debugger for the Nintendo Switch"
+    mainClassName = "$moduleName/me.mdbell.noexs.ui.NoexsApplication"
+
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.usb4java:usb4java:1.3.0"
+    compile "org.usb4java:usb4java-javax:1.3.0"
+    compile "com.google.code.gson:gson:2.8.5"
+    compile "org.ow2.asm:asm:7.1"
+}
+
+javafx {
+    version = "12.0.2"
+    modules = ["javafx.controls", "javafx.fxml" ]
+}
+
+jlink {
+    options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
+    launcher {
+        name = "noexs"
+    }
+}
+
+wrapper {
+    gradleVersion = "5.6"
+    distributionType = Wrapper.DistributionType.ALL
+}

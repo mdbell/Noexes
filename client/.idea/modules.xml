@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/JNoexsClient.iml" filepath="$PROJECT_DIR$/JNoexsClient.iml" />
-      <module fileurl="file://$PROJECT_DIR$/modules/Utils/Utils.iml" filepath="$PROJECT_DIR$/modules/Utils/Utils.iml" />
-    </modules>
-  </component>
-</project>
