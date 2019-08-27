@@ -12,7 +12,7 @@
     "is_64_bit": true,
     "address_space_type": 3,
     "filesystem_access": {
-        "permissions": "0xFFFFFFFFFFFFFFFF"
+        "permissions": "0xffffffffffffffff"
     },
     "service_access": [
         "*"
@@ -163,7 +163,7 @@
         },
         {
             "type": "min_kernel_version",
-            "value": "0x0030"
+            "value": "0x0060"
         },
         {
             "type": "handle_table_size",
