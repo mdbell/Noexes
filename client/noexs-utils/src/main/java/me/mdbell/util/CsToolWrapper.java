@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public final class CsToolWrapper {
 
-    static Pattern pattern = Pattern.compile("^([0-9a-fA-F]*) {2}([0-9a-fA-F]*) {2}(.*)$");
+    static Pattern pattern = Pattern.compile("^\\W*([0-9a-fA-F]*)\\W{2}([0-9a-fA-F\\W]*)\\W{2}(.*)$");
 
     public static byte[] assemble(String str, long addr) throws IOException {
         ProcessBuilder pb = new ProcessBuilder();
