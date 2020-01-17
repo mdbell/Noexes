@@ -260,8 +260,10 @@ public class MemorySearchService extends Service<SearchResult> {
             long size = res.curr.getSize();
             long start = supplier.getStart();
             for (DumpIndex idx : indices) {
-                if (isCancelled() || idx.getAddress() >= supplier.getEnd()) {
-                    break;
+                if (isCancelled() ||
+                    idx.getAddress() >= supplier.getEnd() ||
+                    idx.getEndAddress() <= start) {
+                    continue;
                 }
                 updateMessage("Searching...");
                 ByteBuffer b = res.curr.getBuffer(idx);
