@@ -1,6 +1,6 @@
 {
     "name" : "TCPGecko",
-    "title_id" : "0x0100000000000038",
+    "title_id" : "0x054e4f4558454000",
     "main_thread_stack_size" : "0x4000",
     "main_thread_priority" : 40,
     "default_cpu_id" : 3,
