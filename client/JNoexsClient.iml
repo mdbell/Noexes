@@ -6,21 +6,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="16" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Utils" />
+    <orderEntry type="module" module-name="Utils" exported="" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="project" />
-    <orderEntry type="library" name="org.usb4java:usb4java:1.2.0" level="project" />
-    <orderEntry type="library" name="org.usb4java:usb4java-javax:1.2.0" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="org.openjfx:javafx-graphics:11.0.1" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx-base:16" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx-controls:11" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx-fxml:11.0.1" level="project" />
   </component>
 </module>

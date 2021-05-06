@@ -1,74 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="mainPane" maxHeight="570.0" maxWidth="1020.0" minHeight="570.0" minWidth="1020.0" prefHeight="570.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="570.0" maxWidth="1020.0" minHeight="570.0" minWidth="1020.0" prefHeight="570.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.MainController">
     <children>
         <AnchorPane layoutY="495.0" prefHeight="71.0" prefWidth="1020.0">
             <children>
-                <Button fx:id="connectBtn" layoutX="885.0" layoutY="39.0" mnemonicParsing="false" onAction="#connect" prefHeight="10.0" prefWidth="121.0" text="Connect" />
+                <Button fx:id="connectBtn" layoutX="885.0" layoutY="39.0" mnemonicParsing="false" onAction="#connect" prefHeight="10.0" prefWidth="121.0" text="%main_button_connect" />
                 <TextField fx:id="ipAddr" layoutX="737.0" layoutY="39.0" prefHeight="25.0" prefWidth="142.0" text="111.111.111.111" />
-                <Label layoutX="737.0" layoutY="15.0" text="IP Address" />
+                <Label layoutX="737.0" layoutY="15.0" text="%main_label_address" />
                 <ProgressBar fx:id="progressBar" layoutX="11.0" layoutY="44.0" prefHeight="17.0" prefWidth="558.0" progress="0.0">
                     <effect>
                         <ColorAdjust hue="-0.52" />
                     </effect>
                 </ProgressBar>
-                <Label fx:id="statusLbl" layoutX="14.0" layoutY="24.0" text="Ready" />
+                <Label fx:id="statusLbl" layoutX="14.0" layoutY="24.0" text="%main_status_default" />
                 <Label fx:id="progressLabel" layoutX="575.0" layoutY="43.0" text="0%" />
-                <Button fx:id="pauseBtn" layoutX="357.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="Pause" />
-                <Button layoutX="411.0" layoutY="12.0" mnemonicParsing="false" onAction="#continueProcess" text="Resume" />
+                <Button fx:id="pauseBtn" layoutX="357.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="%main_button_pause" />
+                <Button layoutX="411.0" layoutY="12.0" mnemonicParsing="false" onAction="#continueProcess" text="%main_button_resume" />
             <ChoiceBox fx:id="connectionType" layoutX="622.0" layoutY="39.0" prefHeight="25.0" prefWidth="107.0" />
-            <CheckBox fx:id="autoResume" layoutX="477.0" layoutY="15.0" mnemonicParsing="false" text="Auto Resume" />
+            <CheckBox fx:id="autoResume" layoutX="477.0" layoutY="15.0" mnemonicParsing="false" text="%main_label_auto_resume" />
             </children>
         </AnchorPane>
         <Separator layoutY="490.0" prefHeight="17.0" prefWidth="1020.0" />
         <TabPane fx:id="tabs" layoutX="-2.0" layoutY="-2.0" prefHeight="491.0" prefWidth="1022.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab fx:id="toolsTab" text="Tools">
+                <Tab fx:id="toolsTab" text="%main_tab_tools">
                     <content>
                         <fx:include fx:id="toolsTabPage" source="ToolsTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="searchTab" text="Search">
+                <Tab fx:id="searchTab" text="%main_tab_search">
                     <content>
                         <fx:include fx:id="searchTabPage" source="SearchTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="pointerSearchTab" text="Pointer Search">
+                <Tab fx:id="pointerSearchTab" text="%main_tab_pointer_search">
                     <content>
                         <fx:include fx:id="pointerTabPage" source="PointerSearchTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="viewerTab" text="Memory Viewer">
+                <Tab fx:id="viewerTab" text="%main_tab_memory_viewer">
                     <content>
                         <fx:include fx:id="memViewTabPage" source="MemoryViewerTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="watchlistTab" text="Watch List">
+                <Tab fx:id="watchlistTab" text="%main_tab_watchlist">
                     <content>
                         <fx:include fx:id="watchlistTabPage" source="WatchlistTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="disassemblerTab" text="Disassembler">
+                <Tab fx:id="disassemblerTab" text="%main_tab_disassembler">
                     <content>
                         <fx:include fx:id="disassembleTabPage" source="DisassemblerTab.fxml" />
-                    </content>
-                </Tab>
-                <Tab fx:id="utilsTab" text="Utils">
-                    <content>
-                        <fx:include fx:id="utilsTabPage" source="UtilsTab.fxml" />
                     </content>
                 </Tab>
             </tabs>
