@@ -5,7 +5,6 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 
-<?import me.mdbell.javafx.control.FormattedLabel?>
 <AnchorPane fx:id="mainPane" maxHeight="570.0" maxWidth="1020.0" minHeight="570.0" minWidth="1020.0" prefHeight="570.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.MainController">
     <children>
         <AnchorPane layoutY="495.0" prefHeight="71.0" prefWidth="1020.0">
@@ -22,7 +21,7 @@
                 <Label fx:id="progressLabel" layoutX="575.0" layoutY="43.0" text="0%" />
                 <Button fx:id="pauseBtn" layoutX="357.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseGame" text="%main.pause" />
                 <Button layoutX="411.0" layoutY="12.0" mnemonicParsing="false" onAction="#continueProcess" text="%main.resume" />
-            <ChoiceBox fx:id="connectionType" layoutX="622.0" layoutY="39.0" prefHeight="25.0" prefWidth="107.0" />
+            <ChoiceBox fx:id="connectionType" disable="true" layoutX="622.0" layoutY="39.0" prefHeight="25.0" prefWidth="107.0" />
             <CheckBox fx:id="autoResume" layoutX="477.0" layoutY="15.0" mnemonicParsing="false" text="%main.auto_resume" />
             </children>
         </AnchorPane>
