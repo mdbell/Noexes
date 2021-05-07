@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane fx:id="watchlistTabPage" prefHeight="470.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.WatchlistController">
+<AnchorPane fx:id="watchlistTabPage" prefHeight="470.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mdbell.noexs.ui.controllers.WatchlistController">
     <children>
-        <TableView fx:id="watchlistTable" editable="true" focusTraversable="false" layoutX="14.0" layoutY="14.0" prefHeight="407.0" prefWidth="1000.0">
+        <TableView fx:id="watchlistTable" editable="true" focusTraversable="false" layoutX="14.0" layoutY="14.0"
+                   prefHeight="407.0" prefWidth="1000.0">
             <columns>
-            <TableColumn fx:id="updateCol" prefWidth="75.0" text="Update" />
-                <TableColumn fx:id="lockedCol" minWidth="75.0" prefWidth="75.0" text="Locked" />
-            <TableColumn fx:id="addrCol" minWidth="100.0" prefWidth="209.0" text="Address" />
-            <TableColumn fx:id="descCol" minWidth="100.0" prefWidth="356.0" text="Description" />
-            <TableColumn fx:id="typeCol" minWidth="52.0" prefWidth="109.0" text="Type" />
-            <TableColumn fx:id="valueCol" maxWidth="224.0" minWidth="75.0" prefWidth="175.0" text="Value" />
+                <TableColumn fx:id="updateCol" prefWidth="75.0" text="%watch.update"/>
+                <TableColumn fx:id="lockedCol" minWidth="75.0" prefWidth="75.0" text="%watch.lock"/>
+                <TableColumn fx:id="addrCol" minWidth="100.0" prefWidth="209.0" text="%watch.address"/>
+                <TableColumn fx:id="descCol" minWidth="100.0" prefWidth="356.0" text="%watch.desc"/>
+                <TableColumn fx:id="typeCol" minWidth="52.0" prefWidth="109.0" text="%watch.type"/>
+                <TableColumn fx:id="valueCol" maxWidth="224.0" minWidth="75.0" prefWidth="175.0" text="%watch.value"/>
             </columns>
         </TableView>
-      <Button fx:id="addButton" layoutX="14.0" layoutY="431.0" mnemonicParsing="false" onAction="#onAddAction" text="Add" />
-      <Button fx:id="removeButton" disable="true" layoutX="62.0" layoutY="431.0" mnemonicParsing="false" onAction="#onRemoveAction" text="Remove" />
-      <Button layoutX="966.0" layoutY="431.0" mnemonicParsing="false" onAction="#onLoad" text="Load" />
-      <Button layoutX="914.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
-      <Button layoutX="131.0" layoutY="431.0" mnemonicParsing="false" onAction="#clearList" text="Clear" />
+        <Button fx:id="addButton" layoutX="14.0" layoutY="431.0" mnemonicParsing="false" onAction="#onAddAction"
+                text="%watch.add"/>
+        <Button fx:id="removeButton" disable="true" layoutX="62.0" layoutY="431.0" mnemonicParsing="false"
+                onAction="#onRemoveAction" text="%watch.remove"/>
+        <Button layoutX="966.0" layoutY="431.0" mnemonicParsing="false" onAction="#onLoad" text="%watch.load"/>
+        <Button layoutX="914.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSave" text="%watch.save"/>
+        <Button layoutX="131.0" layoutY="431.0" mnemonicParsing="false" onAction="#clearList" text="%watch.clear"/>
     </children>
 </AnchorPane>

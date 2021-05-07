@@ -65,9 +65,6 @@ public class MainController implements NetworkConstants, IController {
     SearchController searchTabPageController;
 
     @FXML
-    DisassemblerController disassembleTabPageController;
-
-    @FXML
     PointerSearchController pointerTabPageController;
 
     @FXML
@@ -100,7 +97,6 @@ public class MainController implements NetworkConstants, IController {
         controllers.add(toolsTabPageController);
         controllers.add(memViewTabPageController);
         controllers.add(searchTabPageController);
-        controllers.add(disassembleTabPageController);
         controllers.add(pointerTabPageController);
         controllers.add(watchlistTabPageController);
 
@@ -150,10 +146,6 @@ public class MainController implements NetworkConstants, IController {
 
     public MemoryViewerController memory() {
         return memViewTabPageController;
-    }
-
-    public DisassemblerController disassembly() {
-        return disassembleTabPageController;
     }
 
     @Override

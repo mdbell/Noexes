@@ -19,7 +19,6 @@ public class MemoryInfoContextMenu extends ContextMenu {
         MenuItem ptrFilterStart = new MenuItem("Pointer Search (Filter Min)");
         MenuItem ptrFilterEnd = new MenuItem("Pointer Search (Filter Max)");
         MenuItem memoryView = new MenuItem("Memory Viewer");
-        MenuItem disassembler = new MenuItem("Disassembler");
         searchBoth.setOnAction(event -> {
             MemoryInfoTableModel model = memInfoTable.getSelectionModel().getSelectedItem();
             if (model == null) {
@@ -84,16 +83,7 @@ public class MemoryInfoContextMenu extends ContextMenu {
             }
             mc.get().memory().setViewAddress(model.getAddr());
             mc.get().setTab(MainController.Tab.MEMORY_VIEWER);
-
         });
-        disassembler.setOnAction(event -> {
-            MemoryInfoTableModel model = memInfoTable.getSelectionModel().getSelectedItem();
-            if (model == null) {
-                return;
-            }
-            mc.get().disassembly().setDisassembleAddress(model.getAddr());
-            mc.get().setTab(MainController.Tab.DISASSEMBLER);
-        });
-        getItems().addAll(searchBoth, searchStart, searchEnd, ptrMain, ptrFilter, ptrFilterStart, ptrFilterEnd, memoryView, disassembler);
+        getItems().addAll(searchBoth, searchStart, searchEnd, ptrMain, ptrFilter, ptrFilterStart, ptrFilterEnd, memoryView);
     }
 }

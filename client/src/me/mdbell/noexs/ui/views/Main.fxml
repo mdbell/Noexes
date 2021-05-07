@@ -54,11 +54,6 @@
                         <fx:include fx:id="watchlistTabPage" source="WatchlistTab.fxml" />
                     </content>
                 </Tab>
-                <Tab fx:id="disassemblerTab" text="%main.tabs.disassembler">
-                    <content>
-                        <fx:include fx:id="disassembleTabPage" source="DisassemblerTab.fxml" />
-                    </content>
-                </Tab>
             </tabs>
         </TabPane>
     </children>
