@@ -8,10 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import me.mdbell.javafx.control.AddressSpinner;
-import me.mdbell.javafx.control.FormattedLabel;
-import me.mdbell.javafx.control.FormattedTableCell;
-import me.mdbell.javafx.control.HexSpinner;
+import javafx.util.StringConverter;
+import me.mdbell.javafx.control.*;
 import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.MemoryType;
 import me.mdbell.noexs.dump.DumpRegionSupplier;
@@ -19,6 +17,7 @@ import me.mdbell.noexs.ui.models.*;
 import me.mdbell.noexs.ui.services.MemorySearchService;
 import me.mdbell.noexs.ui.services.SearchResult;
 import me.mdbell.util.HexUtils;
+import me.mdbell.util.LocalizedStringConverter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -100,6 +99,7 @@ public class SearchController implements IController {
         this.bundle = bundle;
         pageLabel.setFormattedText(0, 0, 0);
 
+        searchType.setConverter(new LocalizedStringConverter<>(() -> bundle));
         searchType.getItems().addAll(RangeType.values());
 
         searchType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -109,6 +109,7 @@ public class SearchController implements IController {
         });
         searchType.getSelectionModel().select(RangeType.ALL);
 
+        dataTypeDropdown.setConverter(new LocalizedStringConverter<>(() -> bundle));
         dataTypeDropdown.getItems().addAll(DataType.values());
         dataTypeDropdown.getSelectionModel().select(DataType.INT); // Default is 32-bit
 
@@ -118,6 +119,7 @@ public class SearchController implements IController {
             pokeValue.setSize(size);
         });
 
+        searchConditionTypeDropdown.setConverter(new LocalizedStringConverter<>(() -> bundle));
         searchConditionTypeDropdown.getItems().addAll(SearchType.values());
         searchConditionTypeDropdown.getSelectionModel().select(SearchType.KNOWN); // Default is SPEC Value
 
@@ -132,6 +134,7 @@ public class SearchController implements IController {
                     updateCondition();
                 });
 
+        searchConditionDropdown.setConverter(new LocalizedStringConverter<>(() -> bundle));
         searchConditionDropdown.getItems().addAll(ConditionType.values());
         searchConditionDropdown.getSelectionModel().select(ConditionType.EQUALS);
 

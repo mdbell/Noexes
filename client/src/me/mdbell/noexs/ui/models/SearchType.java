@@ -1,15 +1,20 @@
 package me.mdbell.noexs.ui.models;
 
-public enum SearchType {
-    UNKNOWN("Unknown"), PREVIOUS("Previous"), KNOWN("Known"), DIFFERENT("Different");
-    String readable;
+import me.mdbell.util.ILocalized;
 
-    SearchType(String str){
-        this.readable = str;
+public enum SearchType implements ILocalized {
+    UNKNOWN("search.search_types.unk"),
+    PREVIOUS("search.search_types.prev"),
+    KNOWN("search.search_types.known"),
+    DIFFERENT("search.search_types.diff");
+    String key;
+
+    SearchType(String key) {
+        this.key = key;
     }
 
-    public String toString(){
-        return readable;
+    public String getKey() {
+        return key;
     }
 
     public boolean requiresPrevious() {

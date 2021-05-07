@@ -74,7 +74,7 @@ public class ToolsController implements IController {
     });
 
     @FXML
-    public void initialize(URL url, ResourceBundle bundle) {
+    public void initialize() {
         memoryInfoList = FXCollections.observableArrayList();
 
         for (TableColumn c : memInfoTable.getColumns()) {

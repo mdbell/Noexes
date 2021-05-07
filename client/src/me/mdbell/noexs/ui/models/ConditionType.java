@@ -1,16 +1,18 @@
 package me.mdbell.noexs.ui.models;
 
-public enum ConditionType {
-    EQUALS("Equals", "=="),
-    NOT_EQUAL("Not Equal", "!="),
-    LESS_THAN("Less Than", "<"),
-    LESS_THAN_OR_EQUAL("Less Than or Equal", "<="),
-    GREATER_THAN("Greater Than", ">"),
-    GREATER_OR_EQUAL("Greater or Equal", ">=");
-    String str, operator;
+import me.mdbell.util.ILocalized;
 
-    ConditionType(String str, String operator) {
-        this.str = str;
+public enum ConditionType implements ILocalized {
+    EQUALS("search.cond_types.equals", "=="),
+    NOT_EQUAL("search.cond_types.not_equal", "!="),
+    LESS_THAN("search.cond_types.less_than", "<"),
+    LESS_THAN_OR_EQUAL("search.cond_types.less_than_or_equal", "<="),
+    GREATER_THAN("search.cond_types.greater_than", ">"),
+    GREATER_OR_EQUAL("search.cond_types.greater_than_or_equal", ">=");
+    String key, operator;
+
+    ConditionType(String key, String operator) {
+        this.key = key;
         this.operator = operator;
     }
 
@@ -18,8 +20,8 @@ public enum ConditionType {
         return operator;
     }
 
-    public String toString() {
-        return str;
+    public String getKey() {
+        return key;
     }
 
 }

@@ -72,7 +72,6 @@ public final class SearchResult implements Closeable {
     }
 
     public List<Long> getPage(int idx) {
-        System.out.println(PAGE_SIZE * idx + " - " + Math.min(size(), PAGE_SIZE * (idx + 1)));
         return addresses.subList(PAGE_SIZE * idx, Math.min(size(), PAGE_SIZE * (idx + 1)));
     }
 
