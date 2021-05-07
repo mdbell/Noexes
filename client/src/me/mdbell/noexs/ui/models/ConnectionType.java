@@ -1,10 +1,19 @@
 package me.mdbell.noexs.ui.models;
 
-public enum ConnectionType {
+import me.mdbell.util.ILocalized;
 
-    USB, NETWORK;
+public enum ConnectionType implements ILocalized {
 
-    ConnectionType(){
+    USB("main.conn.usb"), NETWORK("main.conn.network");
 
+    private String key;
+
+    ConnectionType(String key){
+        this.key = key;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
     }
 }

@@ -21,6 +21,7 @@ import me.mdbell.noexs.ui.NoexsApplication;
 import me.mdbell.noexs.ui.Settings;
 import me.mdbell.noexs.ui.models.ConnectionType;
 import me.mdbell.noexs.ui.services.DebuggerConnectionService;
+import me.mdbell.util.LocalizedStringConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,6 +118,7 @@ public class MainController implements NetworkConstants, IController {
 
         ipAddr.setText(Settings.getConnectionHost());
 
+        connectionType.setConverter(new LocalizedStringConverter<>(() -> bundle));
         connectionType.getItems().addAll(ConnectionType.values());
         connectionType.getSelectionModel().select(ConnectionType.NETWORK); //TODO save/store this
         connectionType.getSelectionModel().selectedItemProperty()

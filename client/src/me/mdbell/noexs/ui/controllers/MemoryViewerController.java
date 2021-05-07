@@ -19,8 +19,10 @@ import me.mdbell.util.IPatternMatcher;
 import me.mdbell.util.PatternCompiler;
 import me.mdbell.util.PatternTokenizer;
 
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ResourceBundle;
 import java.util.TimerTask;
 import java.util.function.Function;
 
@@ -101,7 +103,7 @@ public class MemoryViewerController implements IController {
     private long lastAddress = 0;
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle bundle) {
         //setup the memview table
         memViewTable.getSelectionModel().setCellSelectionEnabled(true);
         memoryList = FXCollections.observableArrayList();

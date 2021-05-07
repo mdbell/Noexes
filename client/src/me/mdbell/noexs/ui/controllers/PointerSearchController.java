@@ -1,24 +1,22 @@
 package me.mdbell.noexs.ui.controllers;
 
-import com.google.gson.GsonBuilder;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
 import me.mdbell.javafx.control.AddressSpinner;
 import me.mdbell.javafx.control.HexSpinner;
 import me.mdbell.noexs.ui.Settings;
 import me.mdbell.noexs.ui.services.PointerSearchResult;
 import me.mdbell.noexs.ui.services.PointerSearchService;
 
-import java.io.File;
+import java.net.URL;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class PointerSearchController implements IController {
 
@@ -72,7 +70,7 @@ public class PointerSearchController implements IController {
     private final PointerSearchService searchService = new PointerSearchService();
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle bundle) {
         depthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10));
 
         threadsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Runtime.getRuntime().availableProcessors()));

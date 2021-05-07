@@ -11,8 +11,7 @@ import java.util.function.Supplier;
 
 public class MemoryInfoContextMenu extends ContextMenu {
 
-    public MemoryInfoContextMenu(Supplier<MainController> mc, TableView<MemoryInfoTableModel> memInfoTable) {
-        ResourceBundle bundle = mc.get().bundle();
+    public MemoryInfoContextMenu(ResourceBundle bundle, Supplier<MainController> mc, TableView<MemoryInfoTableModel> memInfoTable) {
         MenuItem searchBoth = new MenuItem(bundle.getString("tools.mem.ctx.search.both"));
         MenuItem searchStart = new MenuItem(bundle.getString("tools.mem.ctx.search.start"));
         MenuItem searchEnd = new MenuItem(bundle.getString("tools.mem.ctx.search.end"));
