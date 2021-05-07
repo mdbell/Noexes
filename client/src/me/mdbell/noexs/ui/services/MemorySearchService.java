@@ -101,7 +101,7 @@ public class MemorySearchService extends Service<SearchResult> {
 
     private List<Long> createList(File where) {
         try {
-            return MappedList.createLongList(new RandomAccessFile(NoexesFiles.createTempFile("addrs"), "rw"));
+            return MappedList.createLongList(new RandomAccessFile(where, "rw"));
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
