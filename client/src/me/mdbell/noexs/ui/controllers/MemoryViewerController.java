@@ -102,7 +102,7 @@ public class MemoryViewerController implements IController {
     private ObservableList<MemoryViewerTableModel> memoryList;
     private long lastAddress = 0;
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle bundle) {
         //setup the memview table
         memViewTable.getSelectionModel().setCellSelectionEnabled(true);

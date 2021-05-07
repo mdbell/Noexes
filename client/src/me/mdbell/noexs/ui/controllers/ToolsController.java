@@ -73,6 +73,7 @@ public class ToolsController implements IController {
         return debugger.peek64(addr);
     });
 
+    @Override
     public void initialize(URL url, ResourceBundle bundle) {
         memoryInfoList = FXCollections.observableArrayList();
 

@@ -69,7 +69,7 @@ public class PointerSearchController implements IController {
 
     private final PointerSearchService searchService = new PointerSearchService();
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle bundle) {
         depthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10));
 

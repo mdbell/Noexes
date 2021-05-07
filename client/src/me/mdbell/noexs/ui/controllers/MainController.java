@@ -90,7 +90,7 @@ public class MainController implements NetworkConstants, IController {
         stage = s;
     }
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle bundle) {
         this.bundle = bundle;
         fileChooser.setInitialDirectory(Settings.getChooserDir());

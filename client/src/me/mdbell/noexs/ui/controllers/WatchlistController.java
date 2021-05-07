@@ -53,7 +53,7 @@ public class WatchlistController implements IController {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle bundle) {
         updateCol.setCellValueFactory(param -> param.getValue().updateProperty());
         lockedCol.setCellValueFactory(param -> param.getValue().lockedProperty());

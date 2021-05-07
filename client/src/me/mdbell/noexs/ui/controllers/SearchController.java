@@ -93,7 +93,6 @@ public class SearchController implements IController {
 
     private ResourceBundle bundle;
 
-    @FXML
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         this.bundle = bundle;
