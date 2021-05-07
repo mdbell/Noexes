@@ -206,7 +206,7 @@ public class MemorySearchService extends Service<SearchResult> {
         }
 
         private void refineSearch() throws IOException {
-            updateMessage("Computing regions...");
+            updateMessage("search.status.compute_regions");
             DumpRegionSupplier supplier = computeRegions(prevResult);
             res.curr = createDump(res, supplier);
             total = prevResult.curr.getSize();
@@ -265,7 +265,7 @@ public class MemorySearchService extends Service<SearchResult> {
                     idx.getEndAddress() <= start) {
                     continue;
                 }
-                updateMessage("Searching...");
+                updateMessage("search.status.in_progress");
                 ByteBuffer b = res.curr.getBuffer(idx);
                 long addr = idx.getAddress();
                 if (addr < start) {

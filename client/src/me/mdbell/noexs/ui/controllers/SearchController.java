@@ -412,7 +412,7 @@ public class SearchController implements IController {
                 long addr = addrs.get(i);
                 try {
                     long curr = result.getCurr(addr);
-                    resultList.add(new SearchValueModel(addr, result.getPrev(addr), result.getCurr(addr)));
+                    resultList.add(new SearchValueModel(addr, result.getPrev(addr), curr));
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;

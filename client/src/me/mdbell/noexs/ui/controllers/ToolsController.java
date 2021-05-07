@@ -18,7 +18,9 @@ import me.mdbell.noexs.ui.menus.MemoryInfoContextMenu;
 import me.mdbell.noexs.ui.models.MemoryInfoTableModel;
 import me.mdbell.util.HexUtils;
 
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -72,7 +74,7 @@ public class ToolsController implements IController {
     });
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle bundle) {
         memoryInfoList = FXCollections.observableArrayList();
 
         for (TableColumn c : memInfoTable.getColumns()) {
@@ -107,7 +109,7 @@ public class ToolsController implements IController {
             displayTitleId(mc.getDebugger().getTitleId(newValue));
         });
 
-        MemoryInfoContextMenu cm = new MemoryInfoContextMenu(() -> mc, memInfoTable);
+        MemoryInfoContextMenu cm = new MemoryInfoContextMenu(bundle, () -> mc, memInfoTable);
         memInfoTable.contextMenuProperty().setValue(cm);
     }
 
