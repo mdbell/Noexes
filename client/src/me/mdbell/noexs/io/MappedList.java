@@ -114,7 +114,7 @@ public abstract class MappedList<T> extends AbstractList<T> implements Closeable
 
             @Override
             protected boolean write(ByteBuffer to, int pos, Long value) {
-                to.putLong(value);
+                to.putLong(pos, value);
                 return true;
             }
         };
