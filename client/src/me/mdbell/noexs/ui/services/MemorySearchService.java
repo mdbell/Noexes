@@ -5,10 +5,10 @@ import javafx.concurrent.Task;
 import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.DebuggerStatus;
 import me.mdbell.noexs.core.MemoryInfo;
-import me.mdbell.noexs.io.MappedList;
 import me.mdbell.noexs.dump.*;
-import me.mdbell.noexs.ui.NoexesFiles;
+import me.mdbell.noexs.io.MappedList;
 import me.mdbell.noexs.misc.DumpAddressList;
+import me.mdbell.noexs.ui.NoexesFiles;
 import me.mdbell.noexs.ui.models.ConditionType;
 import me.mdbell.noexs.ui.models.DataType;
 import me.mdbell.noexs.ui.models.SearchType;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class MemorySearchService extends Service<SearchResult> {
+public class MemorySearchService extends Service<SearchResult> implements IMessageArguments {
 
     private DumpRegionSupplier supplier;
     private Debugger conn;
@@ -40,6 +40,8 @@ public class MemorySearchService extends Service<SearchResult> {
     private long knownValue;
 
     private SearchResult prevResult;
+
+    private final Object[] args = new Object[4];
 
     public void clear() {
         supplier = null;
@@ -165,6 +167,11 @@ public class MemorySearchService extends Service<SearchResult> {
         this.supplier = supplier;
     }
 
+    @Override
+    public Object[] getMessageArguments() {
+        return args;
+    }
+
     interface DataProvider {
         long get(ByteBuffer from);
     }
@@ -200,13 +207,15 @@ public class MemorySearchService extends Service<SearchResult> {
             }
             double average = avg.getAverage() * 2;
             long remaining = total - curr;
-            updateMessage(String.format("Refining... (%s/%s) ETA: %s", curr, total,
-                    TimeUtils.formatTime((long) (remaining / average * 1000))));
+            args[0] = curr;
+            args[1] = total;
+            args[2] = TimeUtils.formatTime((long) (remaining / average * 1000));
+            updateMessage("search.service.refine");
             updateProgress(curr, total);
         }
 
         private void refineSearch() throws IOException {
-            updateMessage("search.status.compute_regions");
+            updateMessage("search.service.compute_regions.progress");
             DumpRegionSupplier supplier = computeRegions(prevResult);
             res.curr = createDump(res, supplier);
             total = prevResult.curr.getSize();
@@ -232,8 +241,10 @@ public class MemorySearchService extends Service<SearchResult> {
                             addAddress(addr);
                         }
                         addr = addrs.next();
-                    } else while (l > addr && addrs.hasNext()) {
-                        addr = addrs.next();
+                    } else {
+                        while (l > addr && addrs.hasNext()) {
+                            addr = addrs.next();
+                        }
                     }
                 }
                 update(idx.getSize());
@@ -261,11 +272,11 @@ public class MemorySearchService extends Service<SearchResult> {
             long start = supplier.getStart();
             for (DumpIndex idx : indices) {
                 if (isCancelled() ||
-                    idx.getAddress() >= supplier.getEnd() ||
-                    idx.getEndAddress() <= start) {
+                        idx.getAddress() >= supplier.getEnd() ||
+                        idx.getEndAddress() <= start) {
                     continue;
                 }
-                updateMessage("search.status.in_progress");
+                updateMessage("search.service.in_progress");
                 ByteBuffer b = res.curr.getBuffer(idx);
                 long addr = idx.getAddress();
                 if (addr < start) {
@@ -318,7 +329,8 @@ public class MemorySearchService extends Service<SearchResult> {
                 size += factory.getLength();
                 regions.add(factory.build());
             }
-            updateMessage(regions.size() + " regions computed.");
+            args[0] = regions.size();
+            updateMessage("search.service.compute_regions.complete");
             return DumpRegionSupplier.createSupplier(start, end, regions, size);
         }
 
@@ -351,7 +363,7 @@ public class MemorySearchService extends Service<SearchResult> {
             try {
                 dump = new MemoryDump(res.getLocation());
                 dump.setTid(conn.getCurrentTitleId());
-                dump.getInfos().addAll(Arrays.asList(conn.query(0,10000)));
+                dump.getInfos().addAll(Arrays.asList(conn.query(0, 10000)));
                 dout = dump.openStream();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -379,11 +391,11 @@ public class MemorySearchService extends Service<SearchResult> {
                     double average = avg.getAverage() * 2;
                     long remaining = totalSize - read;
                     updateProgress(read, totalSize);
-                    updateMessage(String.format("Dumping - DL: %s/s T: %s R: %s ETA: %s",
-                            NetUtils.formatSize((long) (average)),
-                            NetUtils.formatSize(totalSize),
-                            NetUtils.formatSize(remaining),
-                            TimeUtils.formatTime((long) (remaining / average * 1000))));
+                    args[0] = NetUtils.formatSize((long) (average));
+                    args[1] = NetUtils.formatSize(totalSize);
+                    args[2] = NetUtils.formatSize(remaining);
+                    args[3] = TimeUtils.formatTime((long) (remaining / average * 1000));
+                    updateMessage("search.service.dumping");
 
                 }
             }

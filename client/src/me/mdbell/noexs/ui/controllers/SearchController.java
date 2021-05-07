@@ -8,8 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.StringConverter;
-import me.mdbell.javafx.control.*;
+import me.mdbell.javafx.control.AddressSpinner;
+import me.mdbell.javafx.control.FormattedLabel;
+import me.mdbell.javafx.control.FormattedTableCell;
+import me.mdbell.javafx.control.HexSpinner;
 import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.MemoryType;
 import me.mdbell.noexs.dump.DumpRegionSupplier;
@@ -192,6 +194,8 @@ public class SearchController implements IController {
         cm.getItems().addAll(memoryView, watchList);
         searchResults.contextMenuProperty().setValue(cm);
         updateCondition();
+
+        searchService.messageProperty().addListener(new StatusListener(mc, searchService));
     }
 
     private void updateCondition() {
@@ -455,4 +459,5 @@ public class SearchController implements IController {
         }
         return null;
     }
+
 }

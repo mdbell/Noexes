@@ -49,7 +49,7 @@ public class PointerSearchResult implements Comparable<PointerSearchResult>, Clo
             str = str + " " + (offset < 0 ? " - " : "+ ") + Long.toUnsignedString(Math.abs(offset), 16);
         }
 
-        return prefix.toString() + str + suffix.toString();
+        return prefix + str + suffix;
     }
 
     @Override

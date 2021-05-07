@@ -101,7 +101,7 @@ public class PointerSearchController implements IController {
 
         dumpFilePath.textProperty().addListener((observable, oldValue, newValue) -> updateSearchButton());
 
-        searchService.messageProperty().addListener((observable, oldValue, newValue) -> mc.setStatus(newValue));
+        searchService.messageProperty().addListener(new StatusListener(mc, searchService));
 
         results = FXCollections.observableArrayList();
         resultList.setItems(results);

@@ -114,7 +114,7 @@ public class MainController implements NetworkConstants, IController {
             progressLabel.setText(i + "%");
         });
         progressBar.setProgress(0);
-        connectionService.messageProperty().addListener((observable, oldValue, newValue) -> setStatus(newValue));
+        connectionService.messageProperty().addListener(new StatusListener(this, connectionService));
 
         ipAddr.setText(Settings.getConnectionHost());
 
