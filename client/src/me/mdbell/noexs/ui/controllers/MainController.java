@@ -9,11 +9,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import me.mdbell.javafx.control.FormattedLabel;
+import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.DebuggerStatus;
 import me.mdbell.noexs.core.IConnection;
-import me.mdbell.noexs.io.net.NetworkConstants;
-import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.Result;
+import me.mdbell.noexs.io.net.NetworkConstants;
 import me.mdbell.noexs.misc.NopConnection;
 import me.mdbell.noexs.misc.ResultDecoder;
 import me.mdbell.noexs.ui.NoexsApplication;
@@ -25,10 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
@@ -81,7 +81,9 @@ public class MainController implements NetworkConstants, IController {
 
     private Stage stage;
 
-    private FileChooser fileChooser = new FileChooser();
+    private final FileChooser fileChooser = new FileChooser();
+
+    private ResourceBundle bundle;
 
     public void setStage(Stage s) {
         if (stage != null) {
@@ -91,7 +93,8 @@ public class MainController implements NetworkConstants, IController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle bundle) {
+        this.bundle = bundle;
         fileChooser.setInitialDirectory(Settings.getChooserDir());
         controllers.add(this);
         controllers.add(toolsTabPageController);
@@ -281,15 +284,16 @@ public class MainController implements NetworkConstants, IController {
     }
 
 
-    public void setStatus(String message) {
-        if (message.length() == 0) {
-            return;
-        }
+    public void setStatus(String formatKey, Object... args) {
         if (!Platform.isFxApplicationThread()) {
-            Platform.runLater(() -> setStatus(message));
+            String finalFormatKey = formatKey;
+            Platform.runLater(() -> setStatus(finalFormatKey, args));
             return;
         }
-        statusLbl.setText(message);
+        if (bundle.containsKey(formatKey)) {
+            formatKey = bundle.getString(formatKey);
+        }
+        statusLbl.setText(MessageFormat.format(formatKey, args));
     }
 
     public ProgressBar getProgressBar() {
@@ -397,7 +401,7 @@ public class MainController implements NetworkConstants, IController {
             File parent = f.getParentFile();
             fileChooser.setInitialDirectory(parent);
             Settings.setChooserFile(parent);
-            if(property != null) {
+            if (property != null) {
                 property.setValue(f.toPath().toString());
             }
         }

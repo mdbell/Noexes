@@ -9,18 +9,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import me.mdbell.javafx.control.AddressSpinner;
+import me.mdbell.javafx.control.FormattedLabel;
 import me.mdbell.javafx.control.FormattedTableCell;
 import me.mdbell.javafx.control.HexSpinner;
 import me.mdbell.noexs.core.Debugger;
 import me.mdbell.noexs.core.MemoryType;
+import me.mdbell.noexs.dump.DumpRegionSupplier;
 import me.mdbell.noexs.ui.models.*;
 import me.mdbell.noexs.ui.services.MemorySearchService;
 import me.mdbell.noexs.ui.services.SearchResult;
-import me.mdbell.noexs.dump.DumpRegionSupplier;
 import me.mdbell.util.HexUtils;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.function.Function;
 
 public class SearchController implements IController {
@@ -69,7 +72,7 @@ public class SearchController implements IController {
     TitledPane searchOptions;
 
     @FXML
-    Label conditionLabel;
+    FormattedLabel conditionLabel;
 
     @FXML
     Button pageLeft;
@@ -78,7 +81,7 @@ public class SearchController implements IController {
     Button pageRight;
 
     @FXML
-    Label pageLabel;
+    FormattedLabel pageLabel;
 
     private SearchResult result;
 
@@ -89,8 +92,14 @@ public class SearchController implements IController {
 
     private int currentPage = 0;
 
+    private ResourceBundle bundle;
+
     @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
+        this.bundle = bundle;
+        pageLabel.setFormattedText(0, 0, 0);
+
         searchType.getItems().addAll(RangeType.values());
 
         searchType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -159,7 +168,8 @@ public class SearchController implements IController {
         diff.setCellValueFactory(param -> param.getValue().diffProperty());
 
         ContextMenu cm = new ContextMenu();
-        MenuItem memoryView = new MenuItem("Memory Viewer");
+
+        MenuItem memoryView = new MenuItem(bundle.getString("main.tabs.memory"));
         memoryView.setOnAction(event -> {
             SearchValueModel m = searchResults.getSelectionModel().getSelectedItem();
             if (m == null) {
@@ -168,7 +178,7 @@ public class SearchController implements IController {
             mc.memory().setViewAddress(m.getAddr());
             mc.setTab(MainController.Tab.MEMORY_VIEWER);
         });
-        MenuItem watchList = new MenuItem("Watch List");
+        MenuItem watchList = new MenuItem(bundle.getString("main.tabs.watchlist"));
         watchList.setOnAction(event -> {
             SearchValueModel m = searchResults.getSelectionModel().getSelectedItem();
             if (m == null) {
@@ -193,24 +203,19 @@ public class SearchController implements IController {
         String cmp = condition.getOperator();
         String right;
         switch (type) {
-            case UNKNOWN:
-                right = "*";
-                break;
-            case PREVIOUS:
-                right = prevName;
-                break;
-            case KNOWN:
-                right = value;
-                break;
-            case DIFFERENT:
+            case UNKNOWN -> right = "*";
+            case PREVIOUS -> right = prevName;
+            case KNOWN -> right = value;
+            case DIFFERENT -> {
                 left = "|" + currentName + " - " + prevName + "|";
                 right = value;
-                break;
-            default:
+            }
+            default -> {
                 conditionLabel.setText("Invalid/Unknown condition!");
                 return;
+            }
         }
-        conditionLabel.setText(left + " " + cmp + " " + right);
+        conditionLabel.setFormattedText(left, cmp, right);
     }
 
     public void setSearchRange(long start, long end) {
@@ -238,7 +243,7 @@ public class SearchController implements IController {
 
     public void poke(ActionEvent event) {
         if (isServiceRunning()) {
-            MainController.showMessage("Please wait for your previous task to finish!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.service_running"), Alert.AlertType.WARNING);
             return;
         }
         List<SearchValueModel> models = searchResults.getSelectionModel().getSelectedItems();
@@ -277,7 +282,7 @@ public class SearchController implements IController {
 
     public void onStartAction(ActionEvent event) {
         if (isServiceRunning()) {
-            MainController.showMessage("Please wait for your current task to complete!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.service_running"), Alert.AlertType.WARNING);
             return;
         }
         DataType dataType = dataTypeDropdown.getValue();
@@ -293,7 +298,8 @@ public class SearchController implements IController {
 
     public void onRestartAction(ActionEvent event) {
         if (isServiceRunning()) {
-            MainController.showMessage("Please wait for your current search to complete (or cancel it)!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.service_running_cancel"),
+                    Alert.AlertType.WARNING);
             return;
         }
         searchService.clear();
@@ -310,35 +316,37 @@ public class SearchController implements IController {
         result = null;
         currentPage = 0;
         updatePageInfo();
-        mc.setStatus("Search result cleared!");
+        mc.setStatus("search.status.cleared");
     }
 
     public void onCancelAction(ActionEvent event) {
         if (runningService == null) {
-            MainController.showMessage("No search has been run!", Alert.AlertType.INFORMATION);
+            MainController.showMessage(bundle.getString("search.info.not_run"), Alert.AlertType.INFORMATION);
             return;
         }
         if (!runningService.isRunning()) {
-            MainController.showMessage("No search is running!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.not_running"), Alert.AlertType.WARNING);
         }
         if (runningService.cancel()) {
             mc.getProgressBar().progressProperty().unbind();
-            mc.setStatus("Search Canceled");
+            mc.setStatus("search.status.canceled");
             searchOptions.setDisable(false);
         }
     }
 
     public void onUndoAction(ActionEvent event) {
         if (isServiceRunning()) {
-            MainController.showMessage("Please cancel/wait for the current task before undoing a search!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.undo_wait"),
+                    Alert.AlertType.WARNING);
             return;
         }
         if (result == null) {
-            MainController.showMessage("Please preform a search before trying to undo it!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.undo_no_result"),
+                    Alert.AlertType.WARNING);
             return;
         }
         if (result.getPrev() == null) {
-            MainController.showMessage("No previous search exists!", Alert.AlertType.WARNING);
+            MainController.showMessage(bundle.getString("search.warn.undo_no_prev"), Alert.AlertType.WARNING);
             return;
         }
         SearchResult prev = result.getPrev();
@@ -363,7 +371,7 @@ public class SearchController implements IController {
         searchService.setOnSucceeded(v -> {
             result = (SearchResult) v.getSource().getValue();
             searchService.setPrevResult(result);
-            mc.setStatus("Done! Total Result:" + result.size());
+            mc.setStatus("search.status.complete", result.size());
             resultList.clear();
             currentPage = 0;
             searchOptions.setDisable(false);
@@ -376,7 +384,7 @@ public class SearchController implements IController {
 
         searchService.setOnFailed(value -> {
             searchService.setPrevResult(null);
-            mc.setStatus("Search failed!");
+            mc.setStatus("search.status.failed");
             Throwable t = value.getSource().getException();
             t.printStackTrace();
             MainController.showMessage(t);
@@ -392,9 +400,9 @@ public class SearchController implements IController {
         pageLeft.setDisable(currentPage == 0);
         pageRight.setDisable(currentPage >= maxPages - 1);
         if (maxPages == 0) {
-            pageLabel.setText("Page: 0/0 (" + size + ")");
+            pageLabel.setFormattedText(0, 0, size);
         } else {
-            pageLabel.setText("Page: " + (currentPage + 1) + "/" + maxPages + " (" + size + ")");
+            pageLabel.setFormattedText(currentPage + 1, maxPages, size);
         }
         resultList.clear();
 
