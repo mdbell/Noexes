@@ -10,6 +10,7 @@ import me.mdbell.noexs.misc.OffsetList;
 import me.mdbell.noexs.ui.controllers.MainController;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.PropertyResourceBundle;
 
 public class NoexsApplication extends Application {
@@ -28,7 +29,8 @@ public class NoexsApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(("views/Main.fxml")));
-        loader.setResources(PropertyResourceBundle.getBundle("bundles.Noexes"));
+        //TODO not hardcode the locale
+        loader.setResources(PropertyResourceBundle.getBundle("bundles.Noexes", Locale.ENGLISH));
         Parent root = loader.load();
         stage.setResizable(false);
         stage.setScene(new Scene(root, stage.getWidth(), stage.getHeight()));
