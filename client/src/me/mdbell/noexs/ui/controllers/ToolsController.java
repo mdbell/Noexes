@@ -109,7 +109,7 @@ public class ToolsController implements IController {
             displayTitleId(mc.getDebugger().getTitleId(newValue));
         });
 
-        MemoryInfoContextMenu cm = new MemoryInfoContextMenu(bundle, () -> mc, memInfoTable);
+        MemoryInfoContextMenu cm = new MemoryInfoContextMenu(() -> mc, memInfoTable);
         memInfoTable.contextMenuProperty().setValue(cm);
     }
 

@@ -428,6 +428,10 @@ public class MainController implements NetworkConstants, IController {
         return stage;
     }
 
+    public ResourceBundle bundle() {
+        return bundle;
+    }
+
     public enum Tab {
         TOOLS,
         SEARCH,
