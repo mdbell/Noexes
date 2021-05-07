@@ -33,7 +33,6 @@ public class NoexsApplication extends Application {
         loader.setResources(PropertyResourceBundle.getBundle("bundles.Noexes", Locale.ENGLISH));
         Parent root = loader.load();
         stage.setResizable(false);
-        stage.show();
         stage.setScene(new Scene(root, stage.getWidth(), stage.getHeight()));
         MainController c = loader.getController();
         c.setStage(stage);
@@ -42,5 +41,6 @@ public class NoexsApplication extends Application {
             c.stop();
             Platform.exit();
         });
+        stage.show();
     }
 }
