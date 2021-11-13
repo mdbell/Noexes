@@ -71,7 +71,7 @@ Result Gecko::Debugger::detatch(){
 Result Gecko::Debugger::resume(){
     RETURN_NOT_ATTACHED();
     flushEvents();
-    return svcContinueDebugEvent(handle, 4 | 2 | 1, 0); //TODO: TID
+    return svcContinueDebugEvent(handle, 4 | 2 | 1, 0, 0); //TODO: TID
 }
 
 Result Gecko::Debugger::pause(){
@@ -85,7 +85,7 @@ Result Gecko::Debugger::query(MemoryInfo* to, u64 addr){
     return svcQueryDebugProcessMemory(to, &pageinfo, handle, addr);
 }
 
-Result Gecko::Debugger::listPids(u64* pids, u32* count, u32 max){
+Result Gecko::Debugger::listPids(u64* pids, s32* count, u32 max){
     return svcGetProcessList(count, pids, max);
 }
 
