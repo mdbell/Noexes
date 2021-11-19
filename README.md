@@ -53,8 +53,12 @@ If you still have problems please double check that you're running at least Java
 
 ### Building the Server
 
-**TODO**
-
+```
+# load devkitpro env
+# source /opt/devkitpro/switchvars.sh
+cd ./server/source/noexs
+make
+```
 
 ## Client Dependencies
 

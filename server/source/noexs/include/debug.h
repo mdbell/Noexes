@@ -72,7 +72,7 @@ namespace Gecko{
         
         Result query(MemoryInfo* to, u64 addr);
         
-        Result listPids(u64* pids, u32* count, u32 max);
+        Result listPids(u64* pids, s32* count, u32 max);
         
         Result readMem(void *buffer, u64 addr, u64 size);
         template <typename T>

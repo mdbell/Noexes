@@ -26,7 +26,7 @@ bool Gecko::Connection::connect(int port){
 
     sockfd = ret = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if(ret < 0) {
-        fatalSimple(MAKERESULT(Module_TCPGecko, TCPGeckoError_socketfail));
+        fatalThrow(MAKERESULT(Module_TCPGecko, TCPGeckoError_socketfail));
         return false;
     }
     
@@ -34,19 +34,19 @@ bool Gecko::Connection::connect(int port){
     ret = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
     if(ret != 0)
     {
-        fatalSimple(MAKERESULT(Module_TCPGecko, TCPGeckoError_socketopt));
+        fatalThrow(MAKERESULT(Module_TCPGecko, TCPGeckoError_socketopt));
         return false;
     }
     
     ret = bind(sockfd, (struct sockaddr *)&addr, 16);
     if (ret < 0) {
-        fatalSimple(MAKERESULT(Module_TCPGecko, TCPGeckoError_bindfail));
+        fatalThrow(MAKERESULT(Module_TCPGecko, TCPGeckoError_bindfail));
         return false;
     }
     
     ret = listen(sockfd, 5);
     if (ret < 0) {
-        fatalSimple(MAKERESULT(Module_TCPGecko, TCPGeckoError_listenfail));
+        fatalThrow(MAKERESULT(Module_TCPGecko, TCPGeckoError_listenfail));
         return false;
     }
     

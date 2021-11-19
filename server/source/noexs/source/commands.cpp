@@ -233,7 +233,7 @@ static Result _querymem_multi(Gecko::Context& ctx) {
 //0x0E
 static Result _current_pid(Gecko::Context& ctx){
     u64 pid;
-    Result rc = pmdmntGetApplicationPid(&pid);
+    Result rc = pmdmntGetApplicationProcessId(&pid);
     WRITE_CHECKED(ctx, pid);
     return rc;
 }
@@ -248,7 +248,7 @@ static Result _attached_pid(Gecko::Context& ctx){
 static Result _list_pids(Gecko::Context& ctx){
     Result rc;
 	int maxpids = GECKO_BUFFER_SIZE / sizeof(u64);
-	u32 count;
+	s32 count;
     rc = ctx.dbg.listPids((u64*)ctx.buffer, &count, maxpids);
     WRITE_CHECKED(ctx, count);
     WRITE_BUFFER_CHECKED(ctx, ctx.buffer, count * sizeof(u64));
@@ -263,7 +263,7 @@ static Result _get_titleid(Gecko::Context& ctx){
     
     READ_CHECKED(ctx, pid);
     
-	rc = pminfoGetTitleId(&title_id, pid);
+	rc = pminfoGetProgramId(&title_id, pid);
 	if (R_FAILED(rc)) {
         title_id = 0;
 	}
