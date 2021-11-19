@@ -20,7 +20,7 @@ public class PointerSearchService extends Service<Set<PointerSearchResult>> impl
     private long maxOffset, address;
     private int maxDepth, threadCount;
 
-    private Object[] args = new Object[0];
+    private Object[] args = new Object[4];
 
 
     public void setDumpPath(Path dumpPath) {
